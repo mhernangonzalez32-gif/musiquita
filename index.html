@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FretboardMaster</title>
+  <style>
+/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
+@layer properties;
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+      "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    --color-emerald-400: oklch(76.5% 0.177 163.223);
+    --color-emerald-500: oklch(69.6% 0.17 162.48);
+    --color-rose-500: oklch(64.5% 0.246 16.439);
+    --color-slate-100: oklch(96.8% 0.007 247.896);
+    --color-slate-200: oklch(92.9% 0.013 255.508);
+    --color-slate-300: oklch(86.9% 0.022 252.894);
+    --color-slate-400: oklch(70.4% 0.04 256.788);
+    --color-slate-500: oklch(55.4% 0.046 257.417);
+    --color-slate-600: oklch(44.6% 0.043 257.281);
+    --color-slate-700: oklch(37.2% 0.044 257.287);
+    --color-slate-800: oklch(27.9% 0.041 260.031);
+    --color-slate-900: oklch(20.8% 0.042 265.755);
+    --color-slate-950: oklch(12.9% 0.042 264.695);
+    --color-black: #000;
+    --color-white: #fff;
+    --spacing: 0.25rem;
+    --container-6xl: 72rem;
+    --text-xs: 0.75rem;
+    --text-xs--line-height: calc(1 / 0.75);
+    --text-sm: 0.875rem;
+    --text-sm--line-height: calc(1.25 / 0.875);
+    --text-xl: 1.25rem;
+    --text-xl--line-height: calc(1.75 / 1.25);
+    --text-2xl: 1.5rem;
+    --text-2xl--line-height: calc(2 / 1.5);
+    --font-weight-medium: 500;
+    --font-weight-bold: 700;
+    --tracking-wide: 0.025em;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --default-transition-duration: 150ms;
+    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
+  }
+}
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  html, :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--default-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+  b, strong {
+    font-weight: bolder;
+  }
+  code, kbd, samp, pre {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+    font-feature-settings: var(--default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--default-mono-font-variation-settings, normal);
+    font-size: 1em;
+  }
+  small {
+    font-size: 80%;
+  }
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+  sup {
+    top: -0.5em;
+  }
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+  :-moz-focusring:where(:not(iframe)) {
+    outline: auto;
+  }
+  progress {
+    vertical-align: baseline;
+  }
+  summary {
+    display: list-item;
+  }
+  ol, ul, menu {
+    list-style: none;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  button, input, select, optgroup, textarea, ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+  ::placeholder {
+    opacity: 1;
+  }
+  @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+  textarea {
+    resize: vertical;
+  }
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+  button, input:where([type="button"], [type="reset"], [type="submit"]), ::file-selector-button {
+    appearance: button;
+  }
+  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+    height: auto;
+  }
+  [hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
+  }
+}
+@layer utilities {
+  .pointer-events-none {
+    pointer-events: none;
+  }
+  .absolute {
+    position: absolute;
+  }
+  .relative {
+    position: relative;
+  }
+  .inset-0 {
+    inset: 0px;
+  }
+  .inset-\[50px\] {
+    inset: 50px;
+  }
+  .top-1\/2 {
+    top: calc(1 / 2 * 100%);
+  }
+  .right-0 {
+    right: 0px;
+  }
+  .left-0 {
+    left: 0px;
+  }
+  .z-0 {
+    z-index: 0;
+  }
+  .z-10 {
+    z-index: 10;
+  }
+  .z-20 {
+    z-index: 20;
+  }
+  .m-1 {
+    margin: var(--spacing);
+  }
+  .-mt-5 {
+    margin-top: calc(var(--spacing) * -5);
+  }
+  .-mt-6 {
+    margin-top: calc(var(--spacing) * -6);
+  }
+  .mt-8 {
+    margin-top: calc(var(--spacing) * 8);
+  }
+  .mb-1 {
+    margin-bottom: var(--spacing);
+  }
+  .mb-2 {
+    margin-bottom: calc(var(--spacing) * 2);
+  }
+  .mb-4 {
+    margin-bottom: calc(var(--spacing) * 4);
+  }
+  .mb-6 {
+    margin-bottom: calc(var(--spacing) * 6);
+  }
+  .mb-8 {
+    margin-bottom: calc(var(--spacing) * 8);
+  }
+  .mb-12 {
+    margin-bottom: calc(var(--spacing) * 12);
+  }
+  .-ml-5 {
+    margin-left: calc(var(--spacing) * -5);
+  }
+  .-ml-6 {
+    margin-left: calc(var(--spacing) * -6);
+  }
+  .flex {
+    display: flex;
+  }
+  .grid {
+    display: grid;
+  }
+  .hidden {
+    display: none;
+  }
+  .inline-flex {
+    display: inline-flex;
+  }
+  .h-4 {
+    height: calc(var(--spacing) * 4);
+  }
+  .h-7 {
+    height: calc(var(--spacing) * 7);
+  }
+  .h-8 {
+    height: calc(var(--spacing) * 8);
+  }
+  .h-9 {
+    height: calc(var(--spacing) * 9);
+  }
+  .h-10 {
+    height: calc(var(--spacing) * 10);
+  }
+  .h-12 {
+    height: calc(var(--spacing) * 12);
+  }
+  .h-\[320px\] {
+    height: 320px;
+  }
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  .w-4 {
+    width: calc(var(--spacing) * 4);
+  }
+  .w-7 {
+    width: calc(var(--spacing) * 7);
+  }
+  .w-8 {
+    width: calc(var(--spacing) * 8);
+  }
+  .w-9 {
+    width: calc(var(--spacing) * 9);
+  }
+  .w-10 {
+    width: calc(var(--spacing) * 10);
+  }
+  .w-12 {
+    width: calc(var(--spacing) * 12);
+  }
+  .w-\[60px\] {
+    width: 60px;
+  }
+  .w-\[320px\] {
+    width: 320px;
+  }
+  .w-full {
+    width: 100%;
+  }
+  .max-w-6xl {
+    max-width: var(--container-6xl);
+  }
+  .min-w-\[1000px\] {
+    min-width: 1000px;
+  }
+  .flex-1 {
+    flex: 1;
+  }
+  .flex-shrink-0 {
+    flex-shrink: 0;
+  }
+  .-translate-y-1\/2 {
+    --tw-translate-y: calc(calc(1 / 2 * 100%) * -1);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+  }
+  .scale-110 {
+    --tw-scale-x: 110%;
+    --tw-scale-y: 110%;
+    --tw-scale-z: 110%;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
+  .cursor-default {
+    cursor: default;
+  }
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  .grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .flex-col {
+    flex-direction: column;
+  }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+  .items-center {
+    align-items: center;
+  }
+  .justify-center {
+    justify-content: center;
+  }
+  .gap-2 {
+    gap: calc(var(--spacing) * 2);
+  }
+  .gap-3 {
+    gap: calc(var(--spacing) * 3);
+  }
+  .gap-6 {
+    gap: calc(var(--spacing) * 6);
+  }
+  .gap-8 {
+    gap: calc(var(--spacing) * 8);
+  }
+  .overflow-x-auto {
+    overflow-x: auto;
+  }
+  .rounded-2xl {
+    border-radius: var(--radius-2xl);
+  }
+  .rounded-full {
+    border-radius: calc(infinity * 1px);
+  }
+  .rounded-lg {
+    border-radius: var(--radius-lg);
+  }
+  .rounded-md {
+    border-radius: var(--radius-md);
+  }
+  .rounded-xl {
+    border-radius: var(--radius-xl);
+  }
+  .border {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
+  .border-4 {
+    border-style: var(--tw-border-style);
+    border-width: 4px;
+  }
+  .border-r {
+    border-right-style: var(--tw-border-style);
+    border-right-width: 1px;
+  }
+  .border-r-8 {
+    border-right-style: var(--tw-border-style);
+    border-right-width: 8px;
+  }
+  .border-b {
+    border-bottom-style: var(--tw-border-style);
+    border-bottom-width: 1px;
+  }
+  .border-\[\#1a120c\] {
+    border-color: #1a120c;
+  }
+  .border-black\/40 {
+    border-color: color-mix(in srgb, #000 40%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--color-black) 40%, transparent);
+    }
+  }
+  .border-slate-600 {
+    border-color: var(--color-slate-600);
+  }
+  .border-slate-700 {
+    border-color: var(--color-slate-700);
+  }
+  .border-slate-800 {
+    border-color: var(--color-slate-800);
+  }
+  .border-slate-950 {
+    border-color: var(--color-slate-950);
+  }
+  .border-white\/10 {
+    border-color: color-mix(in srgb, #fff 10%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--color-white) 10%, transparent);
+    }
+  }
+  .bg-\[\#2c1e16\] {
+    background-color: #2c1e16;
+  }
+  .bg-black\/20 {
+    background-color: color-mix(in srgb, #000 20%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-black) 20%, transparent);
+    }
+  }
+  .bg-emerald-500 {
+    background-color: var(--color-emerald-500);
+  }
+  .bg-rose-500 {
+    background-color: var(--color-rose-500);
+  }
+  .bg-slate-300\/30 {
+    background-color: color-mix(in srgb, oklch(86.9% 0.022 252.894) 30%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-slate-300) 30%, transparent);
+    }
+  }
+  .bg-slate-700 {
+    background-color: var(--color-slate-700);
+  }
+  .bg-slate-800 {
+    background-color: var(--color-slate-800);
+  }
+  .bg-slate-900 {
+    background-color: var(--color-slate-900);
+  }
+  .bg-slate-950 {
+    background-color: var(--color-slate-950);
+  }
+  .bg-gradient-to-b {
+    --tw-gradient-position: to bottom in oklab;
+    background-image: linear-gradient(var(--tw-gradient-stops));
+  }
+  .from-slate-400 {
+    --tw-gradient-from: var(--color-slate-400);
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+  .to-slate-500 {
+    --tw-gradient-to: var(--color-slate-500);
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+  .p-1 {
+    padding: var(--spacing);
+  }
+  .p-3 {
+    padding: calc(var(--spacing) * 3);
+  }
+  .p-5 {
+    padding: calc(var(--spacing) * 5);
+  }
+  .p-6 {
+    padding: calc(var(--spacing) * 6);
+  }
+  .py-2 {
+    padding-block: calc(var(--spacing) * 2);
+  }
+  .pt-3 {
+    padding-top: calc(var(--spacing) * 3);
+  }
+  .pb-3 {
+    padding-bottom: calc(var(--spacing) * 3);
+  }
+  .pb-4 {
+    padding-bottom: calc(var(--spacing) * 4);
+  }
+  .pb-8 {
+    padding-bottom: calc(var(--spacing) * 8);
+  }
+  .text-center {
+    text-align: center;
+  }
+  .font-sans {
+    font-family: var(--font-sans);
+  }
+  .text-2xl {
+    font-size: var(--text-2xl);
+    line-height: var(--tw-leading, var(--text-2xl--line-height));
+  }
+  .text-sm {
+    font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
+  }
+  .text-xl {
+    font-size: var(--text-xl);
+    line-height: var(--tw-leading, var(--text-xl--line-height));
+  }
+  .text-xs {
+    font-size: var(--text-xs);
+    line-height: var(--tw-leading, var(--text-xs--line-height));
+  }
+  .font-bold {
+    --tw-font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-bold);
+  }
+  .font-medium {
+    --tw-font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-medium);
+  }
+  .tracking-wide {
+    --tw-tracking: var(--tracking-wide);
+    letter-spacing: var(--tracking-wide);
+  }
+  .text-emerald-400 {
+    color: var(--color-emerald-400);
+  }
+  .text-emerald-500 {
+    color: var(--color-emerald-500);
+  }
+  .text-slate-100 {
+    color: var(--color-slate-100);
+  }
+  .text-slate-200 {
+    color: var(--color-slate-200);
+  }
+  .text-slate-300 {
+    color: var(--color-slate-300);
+  }
+  .text-slate-400 {
+    color: var(--color-slate-400);
+  }
+  .text-slate-500 {
+    color: var(--color-slate-500);
+  }
+  .text-slate-900 {
+    color: var(--color-slate-900);
+  }
+  .text-white {
+    color: var(--color-white);
+  }
+  .antialiased {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .opacity-50 {
+    opacity: 50%;
+  }
+  .shadow-2xl {
+    --tw-shadow: 0 25px 50px -12px var(--tw-shadow-color, rgb(0 0 0 / 0.25));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-\[0_0_8px_rgba\(16\,185\,129\,0\.6\)\] {
+    --tw-shadow: 0 0 8px var(--tw-shadow-color, rgba(16,185,129,0.6));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-\[0_0_8px_rgba\(244\,63\,94\,0\.8\)\] {
+    --tw-shadow: 0 0 8px var(--tw-shadow-color, rgba(244,63,94,0.8));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-\[0_0_10px_rgba\(16\,185\,129\,0\.5\)\] {
+    --tw-shadow: 0 0 10px var(--tw-shadow-color, rgba(16,185,129,0.5));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-\[0_0_12px_rgba\(244\,63\,94\,0\.8\)\] {
+    --tw-shadow: 0 0 12px var(--tw-shadow-color, rgba(244,63,94,0.8));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-\[0_0_15px_rgba\(16\,185\,129\,0\.6\)\] {
+    --tw-shadow: 0 0 15px var(--tw-shadow-color, rgba(16,185,129,0.6));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-\[0_0_15px_rgba\(244\,63\,94\,0\.4\)\] {
+    --tw-shadow: 0 0 15px var(--tw-shadow-color, rgba(244,63,94,0.4));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-md {
+    --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-sm {
+    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .ring-1 {
+    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .ring-2 {
+    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .ring-white\/10 {
+    --tw-ring-color: color-mix(in srgb, #fff 10%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      --tw-ring-color: color-mix(in oklab, var(--color-white) 10%, transparent);
+    }
+  }
+  .ring-white\/20 {
+    --tw-ring-color: color-mix(in srgb, #fff 20%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      --tw-ring-color: color-mix(in oklab, var(--color-white) 20%, transparent);
+    }
+  }
+  .transition-all {
+    transition-property: all;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .transition-colors {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .duration-200 {
+    --tw-duration: 200ms;
+    transition-duration: 200ms;
+  }
+  .duration-300 {
+    --tw-duration: 300ms;
+    transition-duration: 300ms;
+  }
+  .outline-none {
+    --tw-outline-style: none;
+    outline-style: none;
+  }
+  .select-none {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .last\:border-r-0:last-child {
+    border-right-style: var(--tw-border-style);
+    border-right-width: 0px;
+  }
+  @media (hover: hover) {
+    .hover\:border-emerald-500:hover {
+      border-color: var(--color-emerald-500);
+    }
+    .hover\:bg-slate-700:hover {
+      background-color: var(--color-slate-700);
+    }
+    .hover\:bg-slate-800:hover {
+      background-color: var(--color-slate-800);
+    }
+    .hover\:bg-white\/5:hover {
+      background-color: color-mix(in srgb, #fff 5%, transparent);
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-white\/5:hover {
+        background-color: color-mix(in oklab, var(--color-white) 5%, transparent);
+      }
+    }
+    .hover\:text-white:hover {
+      color: var(--color-white);
+    }
+  }
+  .focus\:border-emerald-500:focus {
+    border-color: var(--color-emerald-500);
+  }
+  .focus\:ring-1:focus {
+    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .focus\:ring-emerald-500:focus {
+    --tw-ring-color: var(--color-emerald-500);
+  }
+  @media (width >= 48rem) {
+    .md\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
+@property --tw-translate-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-scale-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-gradient-position {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-gradient-from {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #0000;
+}
+@property --tw-gradient-via {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #0000;
+}
+@property --tw-gradient-to {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #0000;
+}
+@property --tw-gradient-stops {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-gradient-via-stops {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-gradient-from-position {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --tw-gradient-via-position {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+@property --tw-gradient-to-position {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-tracking {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-inset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-ring-inset {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-offset-width {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --tw-ring-offset-color {
+  syntax: "*";
+  inherits: false;
+  initial-value: #fff;
+}
+@property --tw-ring-offset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-duration {
+  syntax: "*";
+  inherits: false;
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-translate-x: 0;
+      --tw-translate-y: 0;
+      --tw-translate-z: 0;
+      --tw-scale-x: 1;
+      --tw-scale-y: 1;
+      --tw-scale-z: 1;
+      --tw-border-style: solid;
+      --tw-gradient-position: initial;
+      --tw-gradient-from: #0000;
+      --tw-gradient-via: #0000;
+      --tw-gradient-to: #0000;
+      --tw-gradient-stops: initial;
+      --tw-gradient-via-stops: initial;
+      --tw-gradient-from-position: 0%;
+      --tw-gradient-via-position: 50%;
+      --tw-gradient-to-position: 100%;
+      --tw-font-weight: initial;
+      --tw-tracking: initial;
+      --tw-shadow: 0 0 #0000;
+      --tw-shadow-color: initial;
+      --tw-shadow-alpha: 100%;
+      --tw-inset-shadow: 0 0 #0000;
+      --tw-inset-shadow-color: initial;
+      --tw-inset-shadow-alpha: 100%;
+      --tw-ring-color: initial;
+      --tw-ring-shadow: 0 0 #0000;
+      --tw-inset-ring-color: initial;
+      --tw-inset-ring-shadow: 0 0 #0000;
+      --tw-ring-inset: initial;
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-duration: initial;
+    }
+  }
+}
+
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-200 font-sans antialiased">
+
+  <div class="min-h-screen p-6 flex flex-col items-center justify-center">
+
+    <!-- Header & Controls -->
+    <div class="w-full max-w-6xl mb-12 bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl">
+      <div class="flex items-center gap-3 mb-6 border-b border-slate-800 pb-4">
+        <svg class="w-8 h-8 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="5" cy="19" r="2" />
+          <path d="M6.5 17.5 14 10" />
+          <path d="M13 8h4l2-4" />
+          <path d="m11 10 1-1 3 3 1 1-1 1 2 2" />
+        </svg>
+        <h1 class="text-2xl font-bold text-white tracking-wide">
+          Fretboard<span class="text-emerald-500">Master</span>
+        </h1>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Root Note Selector -->
+        <div class="flex flex-col gap-2">
+          <label class="text-sm text-slate-400 font-medium flex items-center gap-2">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18V5l12-2v13" />
+              <circle cx="6" cy="18" r="3" />
+              <circle cx="18" cy="16" r="3" />
+            </svg>
+            Nota Raíz (Tónica)
+          </label>
+          <div id="root-buttons" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Scale Type Selector -->
+        <div class="flex flex-col gap-2">
+          <label class="text-sm text-slate-400 font-medium flex items-center gap-2">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+            Tipo de Escala
+          </label>
+          <select id="scale-select"
+                  class="w-full bg-slate-800 text-white border border-slate-700 rounded-xl p-3 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors cursor-pointer text-slate-100">
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="w-full max-w-6xl mb-6 flex gap-2 bg-slate-900 p-1 rounded-xl border border-slate-800">
+      <button id="tab-btn-fretboard" class="tab-btn flex-1 py-2 rounded-lg font-bold text-sm transition-all duration-200 cursor-pointer">Diapasón</button>
+      <button id="tab-btn-circle" class="tab-btn flex-1 py-2 rounded-lg font-bold text-sm transition-all duration-200 cursor-pointer">Círculo de Quintas</button>
+    </div>
+
+    <!-- Tab: Fretboard -->
+    <div id="tab-fretboard" class="tab-panel w-full flex flex-col items-center">
+      <!-- Fretboard -->
+      <div class="w-full max-w-6xl overflow-x-auto pb-8">
+        <div class="min-w-[1000px] relative" id="fretboard"></div>
+      </div>
+
+      <!-- Legend -->
+      <div class="mt-8 flex flex-wrap justify-center gap-6 text-sm text-slate-400 font-medium">
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.8)]"></div>
+          Nota Raíz (Tónica)
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
+          Notas de la Escala
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded-full bg-slate-700"></div>
+          Resto (modo "Todas las Notas")
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Círculo de Quintas -->
+    <div id="tab-circle" class="tab-panel hidden w-full flex flex-col items-center">
+      <div class="w-full max-w-6xl bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl flex flex-col items-center">
+        <h2 class="text-2xl font-bold text-white tracking-wide mb-2">
+          Círculo de <span class="text-emerald-500">Quintas</span>
+        </h2>
+        <p class="text-slate-400 text-center text-sm mb-8">
+          Haz clic en una tonalidad para ver su relativa menor, alteraciones y escala.
+        </p>
+
+        <div class="relative w-[320px] h-[320px] mb-8">
+          <div class="absolute inset-0 rounded-full border border-slate-700 opacity-50"></div>
+          <div class="absolute inset-[50px] rounded-full border border-slate-700 opacity-50"></div>
+          <div id="circle-nodes" class="absolute inset-0"></div>
+        </div>
+
+        <div id="circle-info" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-5 text-center"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
+    // Afinación estándar, de la cuerda más aguda (1ra) a la más grave (6ta)
+    const TUNING = ['E', 'B', 'G', 'D', 'A', 'E'];
+    const NUM_FRETS = 15;
+    const MARKERS = [3, 5, 7, 9, 12, 15];
+
+    const SCALES = {
+      'All Notes': { name: 'Todas las Notas', intervals: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
+      'Major': { name: 'Mayor (Jónica)', intervals: [0, 2, 4, 5, 7, 9, 11] },
+      'Natural Minor': { name: 'Menor Natural (Eólica)', intervals: [0, 2, 3, 5, 7, 8, 10] },
+      'Major Pentatonic': { name: 'Pentatónica Mayor', intervals: [0, 2, 4, 7, 9] },
+      'Minor Pentatonic': { name: 'Pentatónica Menor', intervals: [0, 3, 5, 7, 10] },
+      'Blues': { name: 'Escala Blues', intervals: [0, 3, 5, 6, 7, 10] },
+      'Dorian': { name: 'Dórico', intervals: [0, 2, 3, 5, 7, 9, 10] },
+      'Mixolydian': { name: 'Mixolidio', intervals: [0, 2, 4, 5, 7, 9, 10] },
+      'Harmonic Minor': { name: 'Menor Armónica', intervals: [0, 2, 3, 5, 7, 8, 11] },
+    };
+
+    const state = { root: 'G', scale: 'Major Pentatonic' };
+
+    function el(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    }
+
+    function getNoteAtFret(openNote, fret) {
+      const openIndex = NOTES.indexOf(openNote);
+      return NOTES[(openIndex + fret) % 12];
+    }
+
+    function activeNotes() {
+      const rootIndex = NOTES.indexOf(state.root);
+      return SCALES[state.scale].intervals.map(i => NOTES[(rootIndex + i) % 12]);
+    }
+
+    // --- Root note buttons ---
+    const rootContainer = document.getElementById('root-buttons');
+    const noteButtons = {};
+    NOTES.forEach(note => {
+      const btn = el('button', 'w-10 h-10 rounded-lg font-bold transition-all duration-200');
+      btn.textContent = note;
+      btn.addEventListener('click', () => {
+        state.root = note;
+        updateRootButtons();
+        renderFretboard();
+      });
+      rootContainer.appendChild(btn);
+      noteButtons[note] = btn;
+    });
+
+    function updateRootButtons() {
+      NOTES.forEach(note => {
+        const btn = noteButtons[note];
+        const active = note === state.root;
+        btn.className = 'w-10 h-10 rounded-lg font-bold transition-all duration-200 ' +
+          (active
+            ? 'bg-rose-500 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)] scale-110'
+            : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white');
+      });
+    }
+
+    // --- Scale select ---
+    const scaleSelect = document.getElementById('scale-select');
+    Object.entries(SCALES).forEach(([key, data]) => {
+      const opt = el('option', undefined, data.name);
+      opt.value = key;
+      scaleSelect.appendChild(opt);
+    });
+    scaleSelect.value = state.scale;
+    scaleSelect.addEventListener('change', () => {
+      state.scale = scaleSelect.value;
+      renderFretboard();
+    });
+
+    // --- Note circle ---
+    function noteCircle(note) {
+      const isRoot = note === state.root;
+      const active = activeNotes().includes(note);
+      const allNotesMode = state.scale === 'All Notes';
+
+      if (!active && !allNotesMode) return null;
+
+      let bg = 'bg-slate-700 text-slate-300 shadow-md';
+      if (isRoot) {
+        bg = 'bg-rose-500 text-white shadow-[0_0_12px_rgba(244,63,94,0.8)] ring-2 ring-white/20 scale-110';
+      } else if (active && !allNotesMode) {
+        bg = 'bg-emerald-500 text-white shadow-[0_0_10px_rgba(16,185,129,0.5)] ring-1 ring-white/10';
+      }
+
+      return el('div',
+        'w-7 h-7 flex items-center justify-center rounded-full font-bold text-xs transition-all duration-300 cursor-default select-none ' + bg,
+        note);
+    }
+
+    // --- Fretboard rendering ---
+    const board = document.getElementById('fretboard');
+
+    function renderFretboard() {
+      board.innerHTML = '';
+
+      // Fret numbers header — primera celda fija de 60px (igual que el nut) para que 1..15 queden exactos sobre sus trastes
+      const header = el('div', 'flex mb-2 text-slate-500 text-sm font-bold select-none');
+      header.appendChild(el('div', 'w-[60px] flex-shrink-0 text-center', 'Nut'));
+      for (let i = 1; i <= NUM_FRETS; i++) {
+        header.appendChild(el('div', 'flex-1 text-center', String(i)));
+      }
+      board.appendChild(header);
+
+      // Fretboard body
+      const body = el('div', 'bg-[#2c1e16] border-4 border-[#1a120c] rounded-md relative shadow-2xl flex flex-col pt-3 pb-3');
+
+      // Inlays (background layer) — misma estructura que el cuerpo: 60px fijos + 15 celdas flex-1
+      const inlays = el('div', 'absolute inset-0 z-0 flex');
+      inlays.appendChild(el('div', 'w-[60px] flex-shrink-0 relative border-r-8 border-black/40'));
+      for (let i = 1; i <= NUM_FRETS; i++) {
+        const cell = el('div', 'flex-1 relative border-r border-white/10 last:border-r-0');
+        if (MARKERS.includes(i)) {
+          const layer = el('div', 'absolute inset-0 flex flex-col items-center justify-center pointer-events-none');
+          if (i === 12) {
+            const col = el('div', 'flex flex-col gap-8');
+            col.appendChild(el('div', 'w-4 h-4 rounded-full bg-slate-300/30'));
+            col.appendChild(el('div', 'w-4 h-4 rounded-full bg-slate-300/30'));
+            layer.appendChild(col);
+          } else {
+            layer.appendChild(el('div', 'w-4 h-4 rounded-full bg-slate-300/30'));
+          }
+          cell.appendChild(layer);
+        }
+        inlays.appendChild(cell);
+      }
+      body.appendChild(inlays);
+
+      // Strings
+      TUNING.forEach((openNote, stringIndex) => {
+        const row = el('div', 'flex relative h-10 group');
+        const thickness = 1 + (TUNING.length - 1 - stringIndex) * 0.5;
+
+        const line = el('div',
+          'absolute left-0 right-0 top-1/2 -translate-y-1/2 z-10 bg-gradient-to-b from-slate-400 to-slate-500 shadow-sm pointer-events-none');
+        line.style.height = thickness + 'px';
+        row.appendChild(line);
+
+        // Nut (Fret 0)
+        const nut = el('div', 'w-[60px] flex-shrink-0 relative z-20 flex items-center justify-center border-r-8 border-slate-950 bg-black/20');
+        const nutNote = noteCircle(getNoteAtFret(openNote, 0));
+        if (nutNote) nut.appendChild(nutNote);
+        row.appendChild(nut);
+
+        // Frets 1..NUM_FRETS
+        for (let f = 1; f <= NUM_FRETS; f++) {
+          const fret = el('div',
+            'flex-1 relative z-20 flex items-center justify-center hover:bg-white/5 transition-colors');
+          const fretNote = noteCircle(getNoteAtFret(openNote, f));
+          if (fretNote) fret.appendChild(fretNote);
+          row.appendChild(fret);
+        }
+
+        body.appendChild(row);
+      });
+
+      board.appendChild(body);
+    }
+
+    updateRootButtons();
+    renderFretboard();
+
+    // ================= Círculo de Quintas =================
+    const CIRCLE_DATA = [
+      { major: 'C', minor: 'Am', acc: 'Natural', notes: ['C', 'D', 'E', 'F', 'G', 'A', 'B'] },
+      { major: 'G', minor: 'Em', acc: '1# (F#)', notes: ['G', 'A', 'B', 'C', 'D', 'E', 'F#'] },
+      { major: 'D', minor: 'Bm', acc: '2# (F#, C#)', notes: ['D', 'E', 'F#', 'G', 'A', 'B', 'C#'] },
+      { major: 'A', minor: 'F#m', acc: '3# (F#, C#, G#)', notes: ['A', 'B', 'C#', 'D', 'E', 'F#', 'G#'] },
+      { major: 'E', minor: 'C#m', acc: '4# (F#, C#, G#, D#)', notes: ['E', 'F#', 'G#', 'A', 'B', 'C#', 'D#'] },
+      { major: 'B', minor: 'G#m', acc: '5# (F#, C#, G#, D#, A#)', notes: ['B', 'C#', 'D#', 'E', 'F#', 'G#', 'A#'] },
+      { major: 'F#', minor: 'D#m', acc: '6#', notes: ['F#', 'G#', 'A#', 'B', 'C#', 'D#', 'E#'] },
+      { major: 'Db', minor: 'Bbm', acc: '5b', notes: ['Db', 'Eb', 'F', 'Gb', 'Ab', 'Bb', 'C'] },
+      { major: 'Ab', minor: 'Fm', acc: '4b', notes: ['Ab', 'Bb', 'C', 'Db', 'Eb', 'F', 'G'] },
+      { major: 'Eb', minor: 'Cm', acc: '3b', notes: ['Eb', 'F', 'G', 'Ab', 'Bb', 'C', 'D'] },
+      { major: 'Bb', minor: 'Gm', acc: '2b', notes: ['Bb', 'C', 'D', 'Eb', 'F', 'G', 'A'] },
+      { major: 'F', minor: 'Dm', acc: '1b (Bb)', notes: ['F', 'G', 'A', 'Bb', 'C', 'D', 'E'] },
+    ];
+
+    const CIRCLE_CENTER = 160;
+    const RADIUS_MAJOR = 140;
+    const RADIUS_MINOR = 90;
+
+    const circleNodes = document.getElementById('circle-nodes');
+    const circleInfo = document.getElementById('circle-info');
+    const majorNodes = [];
+    const minorNodes = [];
+    const circleState = { selected: 0 };
+
+    function positionOnCircle(node, index, radius) {
+      const angle = (index * 30 - 90) * (Math.PI / 180);
+      node.style.left = (CIRCLE_CENTER + radius * Math.cos(angle)) + 'px';
+      node.style.top = (CIRCLE_CENTER + radius * Math.sin(angle)) + 'px';
+    }
+
+    CIRCLE_DATA.forEach((data, index) => {
+      const major = el('button',
+        'absolute w-12 h-12 -ml-6 -mt-6 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 z-10',
+        data.major);
+      positionOnCircle(major, index, RADIUS_MAJOR);
+      major.addEventListener('click', () => selectCircleKey(index));
+      circleNodes.appendChild(major);
+      majorNodes[index] = major;
+
+      const minor = el('button',
+        'absolute w-10 h-10 -ml-5 -mt-5 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 z-10',
+        data.minor);
+      positionOnCircle(minor, index, RADIUS_MINOR);
+      minor.addEventListener('click', () => selectCircleKey(index));
+      circleNodes.appendChild(minor);
+      minorNodes[index] = minor;
+    });
+
+    function selectCircleKey(index) {
+      circleState.selected = index;
+      updateCircleNodes();
+      renderCircleInfo();
+    }
+
+    function updateCircleNodes() {
+      CIRCLE_DATA.forEach((data, index) => {
+        const selected = index === circleState.selected;
+        majorNodes[index].className = 'absolute w-12 h-12 -ml-6 -mt-6 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 z-10 ' +
+          (selected
+            ? 'bg-emerald-500 text-slate-900 shadow-[0_0_15px_rgba(16,185,129,0.6)] scale-110'
+            : 'bg-slate-800 text-slate-300 border border-slate-600 hover:bg-slate-700 hover:border-emerald-500 hover:text-white');
+        minorNodes[index].className = 'absolute w-10 h-10 -ml-5 -mt-5 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 z-10 ' +
+          (selected
+            ? 'bg-emerald-500 text-slate-900 shadow-[0_0_15px_rgba(16,185,129,0.6)] scale-110'
+            : 'bg-slate-800 text-slate-400 border border-slate-600 hover:bg-slate-700 hover:border-emerald-500 hover:text-white');
+      });
+    }
+
+    function renderCircleInfo() {
+      const d = CIRCLE_DATA[circleState.selected];
+      circleInfo.innerHTML = '';
+      circleInfo.appendChild(el('div', 'text-xl font-bold text-emerald-400 mb-2', d.major + ' Mayor'));
+      circleInfo.appendChild(el('div', 'text-slate-300 text-sm mb-1', 'Relativa menor: ' + d.minor));
+      circleInfo.appendChild(el('div', 'text-slate-400 text-sm mb-4', 'Alteraciones: ' + d.acc));
+      d.notes.forEach(note => {
+        circleInfo.appendChild(el('span',
+          'inline-flex items-center justify-center w-9 h-9 m-1 rounded-full bg-slate-700 text-slate-200 font-bold text-sm',
+          note));
+      });
+    }
+
+    // ================= Tabs =================
+    function activateTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        const active = btn.id === 'tab-btn-' + name;
+        btn.className = 'tab-btn flex-1 py-2 rounded-lg font-bold text-sm transition-all duration-200 cursor-pointer ' +
+          (active ? 'bg-emerald-500 text-slate-900' : 'text-slate-400 hover:text-white hover:bg-slate-800');
+      });
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.toggle('hidden', panel.id !== 'tab-' + name);
+      });
+    }
+    document.getElementById('tab-btn-fretboard').addEventListener('click', () => activateTab('fretboard'));
+    document.getElementById('tab-btn-circle').addEventListener('click', () => activateTab('circle'));
+    activateTab('fretboard');
+  </script>
+</body>
+</html>
