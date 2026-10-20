@@ -1,0 +1,587 @@
+/* ==========================================================================
+   chords.css — Estilos puros (Vanilla CSS, Flexbox/Grid + Media Queries)
+   para el Diccionario de Acordes de Guitarra
+   ========================================================================== */
+
+.chord-hidden {
+  display: none !important;
+}
+
+.chord-dict-container {
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  color: #e2e8f0;
+  box-sizing: border-box;
+}
+
+/* --- Panel de Buscador y Controles --- */
+.chord-controls-card {
+  background-color: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.chord-controls-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: end;
+}
+
+.chord-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.chord-field-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.chord-select,
+.chord-text-input {
+  width: 100%;
+  background-color: #1e293b;
+  color: #f8fafc;
+  border: 1px solid #334155;
+  border-radius: 0.65rem;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chord-select {
+  cursor: pointer;
+}
+
+.chord-select:focus,
+.chord-text-input:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+}
+
+.chord-search-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chord-search-btn {
+  background-color: #10b981;
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0.65rem;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.chord-search-btn:hover {
+  background-color: #34d399;
+}
+
+.chord-search-btn:active {
+  transform: scale(0.98);
+}
+
+/* Botones rápidos de Tónica con enharmónicos */
+.chord-root-pills-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.chord-root-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chord-root-pill {
+  padding: 0.45rem 0.7rem;
+  min-width: 2.75rem;
+  border-radius: 0.55rem;
+  background-color: #1e293b;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.chord-root-pill:hover {
+  background-color: #334155;
+  color: #ffffff;
+}
+
+.chord-root-pill--active {
+  background-color: #f43f5e;
+  color: #ffffff;
+  border-color: #fb7185;
+  box-shadow: 0 0 12px rgba(244, 63, 94, 0.45);
+}
+
+/* Mensaje de error o feedback de búsqueda por texto */
+.chord-search-feedback {
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.chord-search-feedback--error {
+  background-color: rgba(244, 63, 94, 0.14);
+  border: 1px solid rgba(244, 63, 94, 0.45);
+  color: #fda4af;
+}
+
+/* Banner informativo de Capo */
+.chord-capo-banner {
+  background-color: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #fde68a;
+  font-size: 0.88rem;
+}
+
+.chord-capo-banner__content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.chord-capo-badge {
+  background-color: #f59e0b;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.chord-inline-link {
+  color: #34d399;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* --- Layout Principal: Izquierda (Diagrama Principal + Mástil) + Derecha (Variaciones) --- */
+.chord-workspace {
+  display: grid;
+  grid-template-columns: minmax(320px, 460px) 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.chord-main-panel,
+.chord-variations-panel {
+  background-color: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 1rem;
+  padding: 1.35rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.35);
+}
+
+.chord-main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 0.9rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.chord-main-title {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.chord-main-subtitle {
+  font-size: 0.88rem;
+  color: #94a3b8;
+  margin-top: 0.2rem;
+}
+
+.chord-active-voicing-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.chord-active-voicing-label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #34d399;
+}
+
+.chord-toggle-fingers-btn {
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.45rem;
+  background-color: #1e293b;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.chord-toggle-fingers-btn:hover {
+  background-color: #334155;
+  color: #ffffff;
+}
+
+/* Badges de dificultad */
+.chord-difficulty-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.chord-difficulty-badge--fácil {
+  background-color: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.chord-difficulty-badge--media {
+  background-color: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.chord-difficulty-badge--avanzada {
+  background-color: rgba(244, 63, 94, 0.18);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.4);
+}
+
+/* Contenedor lado a lado: Mástil Completo (Izquierda) + Diagrama Principal (Derecha) */
+.chord-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  width: 100%;
+}
+
+.chord-full-neck-wrap {
+  flex: 0 0 115px;
+  max-width: 128px;
+  display: flex;
+  justify-content: center;
+}
+
+.chord-main-diagram-wrap {
+  flex: 1 1 auto;
+  max-width: 280px;
+  display: flex;
+  justify-content: center;
+}
+
+.full-neck-svg,
+.chord-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  user-select: none;
+}
+
+.chord-svg--main {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  border-radius: 14px;
+}
+
+.chord-svg--variation {
+  border-radius: 10px;
+}
+
+/* Navegación rápida de posiciones debajo del diagrama */
+.chord-pos-quicknav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.chord-pos-step-btn {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.45rem;
+  background-color: #1e293b;
+  color: #94a3b8;
+  border: 1px solid #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chord-pos-step-btn:hover {
+  color: #f8fafc;
+  background-color: #334155;
+}
+
+.chord-pos-step-btn--active {
+  background-color: #10b981;
+  color: #0f172a;
+  border-color: #10b981;
+  font-weight: 800;
+}
+
+/* Notas del acorde e indicadores */
+.chord-notes-box {
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.chord-notes-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chord-notes-label {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-right: 0.25rem;
+}
+
+.chord-note-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background-color: #10b981;
+  color: #0f172a;
+}
+
+.chord-note-pill--root {
+  background-color: #f43f5e;
+  color: #ffffff;
+}
+
+.chord-limit-warning {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.6rem;
+  background-color: rgba(244, 63, 94, 0.15);
+  border: 1px solid rgba(244, 63, 94, 0.45);
+  color: #fda4af;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.chord-legend-mini {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  font-size: 0.76rem;
+  color: #94a3b8;
+  margin-top: 0.35rem;
+}
+
+/* --- Panel Derecho: Variaciones --- */
+.chord-variations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.chord-variations-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.chord-variations-subtitle {
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+.chord-variations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+  gap: 1rem;
+}
+
+.chord-var-card {
+  background-color: #1e293b;
+  border: 2px solid #334155;
+  border-radius: 0.85rem;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.chord-var-card:hover {
+  transform: translateY(-2px);
+  border-color: #10b981;
+}
+
+.chord-var-card--selected {
+  border-color: #10b981;
+  background-color: rgba(16, 185, 129, 0.08);
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+}
+
+.chord-var-card--exceeds {
+  border-color: rgba(244, 63, 94, 0.55);
+}
+
+.chord-var-card__header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.chord-var-card__title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chord-var-card__svg-wrap {
+  width: 100%;
+  max-width: 175px;
+  display: flex;
+  justify-content: center;
+}
+
+.chord-var-card__footer {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.chord-var-card__frets {
+  font-size: 0.73rem;
+  color: #94a3b8;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.chord-var-card__warn {
+  font-size: 0.7rem;
+  color: #fda4af;
+  font-weight: 600;
+}
+
+/* --- Responsividad (Tablet y Móvil ~360px) --- */
+@media (max-width: 1024px) {
+  .chord-controls-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .chord-workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .chord-controls-card,
+  .chord-main-panel,
+  .chord-variations-panel {
+    padding: 0.95rem;
+  }
+
+  .chord-controls-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chord-main-title {
+    font-size: 1.35rem;
+  }
+
+  .chord-stage {
+    gap: 0.5rem;
+  }
+
+  .chord-full-neck-wrap {
+    flex: 0 0 88px;
+    max-width: 96px;
+  }
+
+  .chord-main-diagram-wrap {
+    max-width: 215px;
+  }
+
+  .chord-variations-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .chord-var-card {
+    padding: 0.55rem;
+  }
+}
+
+@media (max-width: 390px) {
+  .chord-variations-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chord-var-card__svg-wrap {
+    max-width: 190px;
+  }
+}

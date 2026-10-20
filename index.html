@@ -913,6 +913,7 @@
 }
 
   </style>
+  <link rel="stylesheet" href="chords.css" />
 </head>
 <body class="bg-slate-950 text-slate-200 font-sans antialiased">
 
@@ -966,9 +967,10 @@
     </div>
 
     <!-- Tabs -->
-    <div class="w-full max-w-6xl mb-6 flex gap-2 bg-slate-900 p-1 rounded-xl border border-slate-800">
+    <div class="w-full max-w-6xl mb-6 flex flex-wrap gap-2 bg-slate-900 p-1 rounded-xl border border-slate-800">
       <button id="tab-btn-fretboard" class="tab-btn flex-1 py-2 rounded-lg font-bold text-sm transition-all duration-200 cursor-pointer">Diapasón</button>
       <button id="tab-btn-circle" class="tab-btn flex-1 py-2 rounded-lg font-bold text-sm transition-all duration-200 cursor-pointer">Círculo de Quintas</button>
+      <button id="tab-btn-chords" class="tab-btn flex-1 py-2 rounded-lg font-bold text-sm transition-all duration-200 cursor-pointer">Diccionario de Acordes</button>
     </div>
 
     <!-- Tab: Fretboard -->
@@ -1012,6 +1014,125 @@
         </div>
 
         <div id="circle-info" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-5 text-center"></div>
+      </div>
+    </div>
+
+    <!-- Tab: Diccionario de Acordes -->
+    <div id="tab-chords" class="tab-panel hidden w-full flex flex-col items-center">
+      <div id="chord-dictionary-root" class="chord-dict-container">
+
+        <!-- Buscador y Controles del Diccionario -->
+        <div class="chord-controls-card">
+          <div class="chord-root-pills-wrap">
+            <span class="chord-field-label">Selección rápida de Tónica (con equivalentes enharmónicos):</span>
+            <div id="chord-root-pills" class="chord-root-pills"></div>
+          </div>
+
+          <div class="chord-controls-grid">
+            <!-- Selector Tónica -->
+            <div class="chord-field-group">
+              <label for="chord-root-select" class="chord-field-label">Tónica (Raíz)</label>
+              <select id="chord-root-select" class="chord-select"></select>
+            </div>
+
+            <!-- Selector Cualidad -->
+            <div class="chord-field-group">
+              <label for="chord-quality-select" class="chord-field-label">Cualidad del Acorde</label>
+              <select id="chord-quality-select" class="chord-select"></select>
+            </div>
+
+            <!-- Buscador por Símbolo / Texto -->
+            <div class="chord-field-group">
+              <label for="chord-search-input" class="chord-field-label">Buscar por símbolo o texto (opcional)</label>
+              <div class="chord-search-row">
+                <input
+                  id="chord-search-input"
+                  type="text"
+                  class="chord-text-input"
+                  placeholder="Ej: F#maj7, Gb7, Cm7b5, Re menor..."
+                  autocomplete="off"
+                />
+                <button id="chord-search-btn" type="button" class="chord-search-btn">Buscar</button>
+              </div>
+            </div>
+
+            <!-- Selector de Capo -->
+            <div class="chord-field-group">
+              <label for="chord-capo-select" class="chord-field-label">Capo (Cejilla transporte)</label>
+              <select id="chord-capo-select" class="chord-select"></select>
+            </div>
+          </div>
+
+          <!-- Feedback de búsqueda -->
+          <div id="chord-search-feedback" class="chord-search-feedback chord-hidden" role="status" aria-live="polite"></div>
+
+          <!-- Información activa de Capo -->
+          <div id="chord-capo-banner" class="chord-capo-banner chord-hidden"></div>
+        </div>
+
+        <!-- Área Principal: Izquierda (Mástil + Diagrama Principal) | Derecha (Panel de Variaciones) -->
+        <div class="chord-workspace">
+
+          <!-- Columna Izquierda: Diagrama Principal + Selector Visual del Mástil Completo -->
+          <div class="chord-main-panel">
+            <div class="chord-main-header">
+              <div>
+                <h2 id="chord-main-title" class="chord-main-title">C Mayor</h2>
+                <p id="chord-main-subtitle" class="chord-main-subtitle">Do Mayor</p>
+              </div>
+              <span id="chord-active-difficulty" class="chord-difficulty-badge chord-difficulty-badge--fácil">Dificultad: fácil</span>
+            </div>
+
+            <div class="chord-active-voicing-bar">
+              <span id="chord-active-voicing-label" class="chord-active-voicing-label">Posición 1 de 5</span>
+              <button
+                id="chord-toggle-fingers-btn"
+                type="button"
+                class="chord-toggle-fingers-btn"
+                aria-pressed="false"
+              >Mostrar dedos en principal</button>
+            </div>
+
+            <!-- Escenario: Mástil completo a la izquierda + Diagrama Principal a la derecha -->
+            <div class="chord-stage">
+              <div id="chord-full-neck-mount" class="chord-full-neck-wrap" title="Haz clic en los puntos laterales para cambiar de posición en el mástil"></div>
+              <div id="chord-main-diagram-mount" class="chord-main-diagram-wrap"></div>
+            </div>
+
+            <!-- Botones rápidos de posición -->
+            <div id="chord-pos-QuickNav" class="chord-pos-quicknav"></div>
+
+            <!-- Aviso de límite traste 12 con capo -->
+            <div id="chord-main-warning" class="chord-limit-warning chord-hidden"></div>
+
+            <!-- Notas del acorde y leyenda -->
+            <div class="chord-notes-box">
+              <div class="chord-notes-row">
+                <span class="chord-notes-label">Notas que suenan:</span>
+                <div id="chord-main-notes" class="chord-notes-row"></div>
+              </div>
+              <div class="chord-legend-mini">
+                <span><strong>X</strong>: Cuerda muda</span>
+                <span><strong>O</strong>: Cuerda al aire</span>
+                <span><strong>1–4</strong>: Dedos (Índice a Meñique)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Panel de Variaciones (Voicings CAGED, Abiertos y Drop) -->
+          <div class="chord-variations-panel">
+            <div class="chord-variations-header">
+              <div>
+                <h3 class="chord-variations-title">Variaciones y Posiciones en el Mástil</h3>
+                <p class="chord-variations-subtitle">Haz clic en cualquier variación para inspeccionarla en el diagrama principal y ubicarla en el mástil.</p>
+              </div>
+            </div>
+
+            <div id="chord-variations-grid" class="chord-variations-grid"></div>
+          </div>
+
+        </div>
+
       </div>
     </div>
 
@@ -1270,6 +1391,8 @@
       });
     }
 
+    selectCircleKey(0);
+
     // ================= Tabs =================
     function activateTab(name) {
       document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1283,7 +1406,11 @@
     }
     document.getElementById('tab-btn-fretboard').addEventListener('click', () => activateTab('fretboard'));
     document.getElementById('tab-btn-circle').addEventListener('click', () => activateTab('circle'));
+    document.getElementById('tab-btn-chords').addEventListener('click', () => activateTab('chords'));
     activateTab('fretboard');
   </script>
+  <script src="chords-data.js"></script>
+  <script src="chords-logic.js"></script>
+  <script src="chords-render.js"></script>
 </body>
 </html>
