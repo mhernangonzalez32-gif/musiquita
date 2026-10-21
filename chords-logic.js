@@ -277,6 +277,92 @@
     return CHROMATIC_NOTES[(idx + semitones + 120) % 12];
   }
 
+  // Diccionario de intervalos por distancia en semitonos (0..11)
+  const INTERVAL_LABELS = {
+    0: '1',
+    1: 'b2',
+    2: '2',
+    3: 'b3',
+    4: '3',
+    5: '4',
+    6: 'b5',
+    7: '5',
+    8: 'b6',
+    9: '6',
+    10: 'b7',
+    11: '7'
+  };
+
+  /**
+   * Calcula el intervalo musical ('1', 'b3', '3', '5', 'b7', 'bb7', etc.)
+   * entre la tónica (rootNote) y una nota objetivo (targetNote).
+   */
+  function getIntervalLabel(rootNote, targetNote, qualityKey) {
+    const rootIdx = CHROMATIC_NOTES.indexOf(resolveEnharmonicRoot(rootNote) || rootNote);
+    const targetIdx = CHROMATIC_NOTES.indexOf(resolveEnharmonicRoot(targetNote) || targetNote);
+    if (rootIdx === -1 || targetIdx === -1) return '';
+    const dist = (targetIdx - rootIdx + 12) % 12;
+    if (dist === 9 && qualityKey === 'dim7') {
+      return 'bb7';
+    }
+    return INTERVAL_LABELS[dist] || '';
+  }
+
+  /**
+   * Calcula la nota que suena en la cuerda `stringIdx` (0=6ª .. 5=1ª) y traste `fret`
+   * en afinación estándar [E, A, D, G, B, E].
+   */
+  function getNoteAtStandardStringFret(stringIdx, fret) {
+    if (typeof fret !== 'number' || fret < 0) return null;
+    const openPitch = OPEN_STRINGS_PITCH[stringIdx];
+    return CHROMATIC_NOTES[(openPitch + fret) % 12];
+  }
+
+  /**
+   * Determina matemáticamente (mod 12) si la cuerda `stringIdx` en el traste `fret`
+   * corresponde a la Tónica `rootNote`.
+   */
+  function isRootAtStringFret(stringIdx, fret, rootNote) {
+    if (typeof fret !== 'number' || fret < 0) return false;
+    const rootCanonical = resolveEnharmonicRoot(rootNote) || rootNote;
+    const rootIdx = CHROMATIC_NOTES.indexOf(rootCanonical);
+    if (rootIdx === -1) return false;
+    return ((OPEN_STRINGS_PITCH[stringIdx] + fret) % 12) === rootIdx;
+  }
+
+  /**
+   * Devuelve los 7 grados diatónicos armonizados (tríadas y cuatríadas con 7ª)
+   * para una tonalidad mayor dada (ej. 'C', 'G', 'Db', 'Eb', etc.).
+   */
+  function getDiatonicChordsForKey(majorRootRaw) {
+    const canonicalRoot = resolveEnharmonicRoot(majorRootRaw) || 'C';
+    const degrees = [
+      { roman: 'I',    semitones: 0,  triad: 'maj', seventh: 'maj7', role: 'Tónica' },
+      { roman: 'ii',   semitones: 2,  triad: 'm',   seventh: 'm7',   role: 'Supertónica' },
+      { roman: 'iii',  semitones: 4,  triad: 'm',   seventh: 'm7',   role: 'Mediante' },
+      { roman: 'IV',   semitones: 5,  triad: 'maj', seventh: 'maj7', role: 'Subdominante' },
+      { roman: 'V',    semitones: 7,  triad: 'maj', seventh: '7',    role: 'Dominante' },
+      { roman: 'vi',   semitones: 9,  triad: 'm',   seventh: 'm7',   role: 'Relativa menor' },
+      { roman: 'vii°', semitones: 11, triad: 'm7b5', seventh: 'm7b5', role: 'Sensible' }
+    ];
+
+    return degrees.map(d => {
+      const degRoot = transposeNote(canonicalRoot, d.semitones);
+      const dispRoot = ENHARMONIC_DISPLAY[degRoot] || degRoot;
+      const triadLabel = d.triad === 'maj' ? dispRoot : `${dispRoot}${QUALITY_META[d.triad].shortDisplay}`;
+      const seventhLabel = `${dispRoot}${QUALITY_META[d.seventh].shortDisplay}`;
+      return {
+        roman: d.roman,
+        role: d.role,
+        root: degRoot,
+        triadQuality: d.triad,
+        seventhQuality: d.seventh,
+        triadLabel,
+        seventhLabel
+      };
+    });
+  }
+
   /**
    * Calcula los datos de un acorde y sus voicings aplicando el Capo en el traste indicado.
    *
@@ -429,11 +515,16 @@
     ENHARMONIC_DISPLAY,
     NOTE_NAMES_ES,
     QUALITY_META,
+    INTERVAL_LABELS,
     resolveEnharmonicRoot,
     parseChordQuery,
     formatEnharmonicTitle,
     formatSpanishSubtitle,
     transposeNote,
+    getIntervalLabel,
+    getNoteAtStandardStringFret,
+    isRootAtStringFret,
+    getDiatonicChordsForKey,
     getChordWithCapo
   };
 })();

@@ -919,62 +919,84 @@
 
   <div class="min-h-screen p-6 flex flex-col items-center justify-center">
 
-    <!-- Header & Controls -->
-    <div class="w-full max-w-6xl mb-12 bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl">
-      <div class="flex items-center gap-3 mb-6 border-b border-slate-800 pb-4">
-        <svg class="w-8 h-8 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="5" cy="19" r="2" />
-          <path d="M6.5 17.5 14 10" />
-          <path d="M13 8h4l2-4" />
-          <path d="m11 10 1-1 3 3 1 1-1 1 2 2" />
-        </svg>
-        <h1 class="text-2xl font-bold text-white tracking-wide">
-          Fretboard<span class="text-emerald-500">Master</span>
-        </h1>
+    <!-- Marca Principal + Barra de Pestañas -->
+    <div class="w-full max-w-6xl mb-6 bg-slate-900 p-5 rounded-2xl border border-slate-800 shadow-2xl">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-4 border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-3">
+          <svg class="w-8 h-8 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="5" cy="19" r="2" />
+            <path d="M6.5 17.5 14 10" />
+            <path d="M13 8h4l2-4" />
+            <path d="m11 10 1-1 3 3 1 1-1 1 2 2" />
+          </svg>
+          <h1 class="text-2xl font-bold text-white tracking-wide">
+            Fretboard<span class="text-emerald-500">Master</span>
+          </h1>
+        </div>
+        <span class="text-xs text-slate-400 font-medium">Escalas · Círculo de Quintas · Diccionario de Acordes</span>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Root Note Selector -->
-        <div class="flex flex-col gap-2">
-          <label class="text-sm text-slate-400 font-medium flex items-center gap-2">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 18V5l12-2v13" />
-              <circle cx="6" cy="18" r="3" />
-              <circle cx="18" cy="16" r="3" />
-            </svg>
-            Nota Raíz (Tónica)
-          </label>
-          <div id="root-buttons" class="flex flex-wrap gap-2"></div>
-        </div>
-
-        <!-- Scale Type Selector -->
-        <div class="flex flex-col gap-2">
-          <label class="text-sm text-slate-400 font-medium flex items-center gap-2">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3" />
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-            </svg>
-            Tipo de Escala
-          </label>
-          <select id="scale-select"
-                  class="w-full bg-slate-800 text-white border border-slate-700 rounded-xl p-3 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors cursor-pointer text-slate-100">
-          </select>
-        </div>
+      <!-- Tabs -->
+      <div class="w-full flex flex-wrap gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800">
+        <button id="tab-btn-fretboard" class="tab-btn flex-1 py-2 rounded-lg font-bold text-sm transition-all duration-200 cursor-pointer">Diapasón</button>
+        <button id="tab-btn-circle" class="tab-btn flex-1 py-2 rounded-lg font-bold text-sm transition-all duration-200 cursor-pointer">Círculo de Quintas</button>
+        <button id="tab-btn-chords" class="tab-btn flex-1 py-2 rounded-lg font-bold text-sm transition-all duration-200 cursor-pointer">Diccionario de Acordes</button>
       </div>
     </div>
 
-    <!-- Tabs -->
-    <div class="w-full max-w-6xl mb-6 flex flex-wrap gap-2 bg-slate-900 p-1 rounded-xl border border-slate-800">
-      <button id="tab-btn-fretboard" class="tab-btn flex-1 py-2 rounded-lg font-bold text-sm transition-all duration-200 cursor-pointer">Diapasón</button>
-      <button id="tab-btn-circle" class="tab-btn flex-1 py-2 rounded-lg font-bold text-sm transition-all duration-200 cursor-pointer">Círculo de Quintas</button>
-      <button id="tab-btn-chords" class="tab-btn flex-1 py-2 rounded-lg font-bold text-sm transition-all duration-200 cursor-pointer">Diccionario de Acordes</button>
-    </div>
-
-    <!-- Tab: Fretboard -->
+    <!-- Tab: Fretboard (con sus controles aislados visualmente dentro de la pestaña) -->
     <div id="tab-fretboard" class="tab-panel w-full flex flex-col items-center">
+
+      <!-- Controles de Escala y Modo de Visualización (Notas vs Intervalos) -->
+      <div class="w-full max-w-6xl mb-8 bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-2xl">
+        <div class="fretboard-top-controls">
+          <!-- Root Note Selector -->
+          <div class="flex flex-col gap-2">
+            <label class="text-sm text-slate-400 font-medium flex items-center gap-2">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18V5l12-2v13" />
+                <circle cx="6" cy="18" r="3" />
+                <circle cx="18" cy="16" r="3" />
+              </svg>
+              Nota Raíz Global (Escala / Tonalidad)
+            </label>
+            <div id="root-buttons" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Scale Type Selector -->
+          <div class="flex flex-col gap-2">
+            <label class="text-sm text-slate-400 font-medium flex items-center gap-2">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+              </svg>
+              Tipo de Escala
+            </label>
+            <select id="scale-select"
+                    class="w-full bg-slate-800 text-white border border-slate-700 rounded-xl p-3 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors cursor-pointer text-slate-100">
+            </select>
+          </div>
+
+          <!-- Display Mode Selector: Notas vs Intervalos -->
+          <div class="fretboard-display-mode-group">
+            <label class="text-sm text-slate-400 font-medium">Etiquetas en el Mástil</label>
+            <div class="chord-mode-group">
+              <button type="button" id="fb-mode-notes" class="chord-mode-btn chord-mode-btn--active">Notas (C, E, G)</button>
+              <button type="button" id="fb-mode-intervals" class="chord-mode-btn">Intervalos (1, 3, 5)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Banner de Acorde Superpuesto en el Diapasón (oculto por defecto) -->
+      <div id="fretboard-overlay-banner" class="fretboard-overlay-banner chord-hidden">
+        <div id="fretboard-overlay-text"></div>
+        <button type="button" id="fretboard-overlay-clear-btn" class="fretboard-overlay-clear-btn">✕ Quitar superposición de acorde</button>
+      </div>
+
       <!-- Fretboard -->
       <div class="w-full max-w-6xl overflow-x-auto pb-8">
         <div class="min-w-[1000px] relative" id="fretboard"></div>
@@ -984,7 +1006,7 @@
       <div class="mt-8 flex flex-wrap justify-center gap-6 text-sm text-slate-400 font-medium">
         <div class="flex items-center gap-2">
           <div class="w-4 h-4 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.8)]"></div>
-          Nota Raíz (Tónica)
+          Nota Raíz (Tónica = 1)
         </div>
         <div class="flex items-center gap-2">
           <div class="w-4 h-4 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
@@ -1004,7 +1026,7 @@
           Círculo de <span class="text-emerald-500">Quintas</span>
         </h2>
         <p class="text-slate-400 text-center text-sm mb-8">
-          Haz clic en una tonalidad para ver su relativa menor, alteraciones y escala.
+          Haz clic en una tonalidad para sincronizar la tónica, explorar su escala en el diapasón o abrir cualquiera de sus 7 acordes diatónicos en el diccionario.
         </p>
 
         <div class="relative w-[320px] h-[320px] mb-8">
@@ -1024,7 +1046,7 @@
         <!-- Buscador y Controles del Diccionario -->
         <div class="chord-controls-card">
           <div class="chord-root-pills-wrap">
-            <span class="chord-field-label">Selección rápida de Tónica (con equivalentes enharmónicos):</span>
+            <span class="chord-field-label">Selección rápida de Tónica del Acorde (independiente de la escala global):</span>
             <div id="chord-root-pills" class="chord-root-pills"></div>
           </div>
 
@@ -1085,12 +1107,12 @@
 
             <div class="chord-active-voicing-bar">
               <span id="chord-active-voicing-label" class="chord-active-voicing-label">Posición 1 de 5</span>
-              <button
-                id="chord-toggle-fingers-btn"
-                type="button"
-                class="chord-toggle-fingers-btn"
-                aria-pressed="false"
-              >Mostrar dedos en principal</button>
+              <div class="chord-mode-group" role="group" aria-label="Etiquetas en los puntos del diagrama">
+                <button type="button" class="chord-mode-btn chord-mode-btn--active" data-chord-dot-mode="intervals" title="Ver intervalos (1, 3, 5, b7)">Intervalos</button>
+                <button type="button" class="chord-mode-btn" data-chord-dot-mode="fingers" title="Ver dedos sugeridos (1-4)">Dedos</button>
+                <button type="button" class="chord-mode-btn" data-chord-dot-mode="notes" title="Ver nombres de nota (C, E, G)">Notas</button>
+                <button type="button" class="chord-mode-btn" data-chord-dot-mode="none" title="Puntos sin texto">Limpio</button>
+              </div>
             </div>
 
             <!-- Escenario: Mástil completo a la izquierda + Diagrama Principal a la derecha -->
@@ -1102,19 +1124,25 @@
             <!-- Botones rápidos de posición -->
             <div id="chord-pos-QuickNav" class="chord-pos-quicknav"></div>
 
+            <!-- Botón de puente: Superponer este voicing en el Diapasón -->
+            <button type="button" id="chord-send-to-fretboard-btn" class="chord-bridge-btn">
+              🎸 Ver este voicing superpuesto en el Diapasón
+            </button>
+
             <!-- Aviso de límite traste 12 con capo -->
             <div id="chord-main-warning" class="chord-limit-warning chord-hidden"></div>
 
             <!-- Notas del acorde y leyenda -->
             <div class="chord-notes-box">
               <div class="chord-notes-row">
-                <span class="chord-notes-label">Notas que suenan:</span>
+                <span class="chord-notes-label">Notas (Intervalo):</span>
                 <div id="chord-main-notes" class="chord-notes-row"></div>
               </div>
               <div class="chord-legend-mini">
-                <span><strong>X</strong>: Cuerda muda</span>
-                <span><strong>O</strong>: Cuerda al aire</span>
-                <span><strong>1–4</strong>: Dedos (Índice a Meñique)</span>
+                <span><span class="chord-legend-dot chord-legend-dot--root"></span><strong>Tónica (Raíz)</strong></span>
+                <span><span class="chord-legend-dot chord-legend-dot--tone"></span><strong>Nota del acorde</strong></span>
+                <span><strong>X</strong>: Muda</span>
+                <span><strong>O</strong>: Al aire</span>
               </div>
             </div>
           </div>
@@ -1138,6 +1166,8 @@
 
   </div>
 
+  <script src="chords-data.js"></script>
+  <script src="chords-logic.js"></script>
   <script>
     const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
@@ -1158,7 +1188,12 @@
       'Harmonic Minor': { name: 'Menor Armónica', intervals: [0, 2, 3, 5, 7, 8, 11] },
     };
 
-    const state = { root: 'G', scale: 'Major Pentatonic' };
+    const state = {
+      root: 'G',
+      scale: 'Major Pentatonic',
+      displayMode: 'notes', // 'notes' | 'intervals'
+      chordOverlay: null    // { root, quality, title, voicingLabel, realFrets, capo }
+    };
 
     function el(tag, className, text) {
       const node = document.createElement(tag);
@@ -1185,6 +1220,7 @@
       btn.textContent = note;
       btn.addEventListener('click', () => {
         state.root = note;
+        syncCircleToGlobalRoot(note);
         updateRootButtons();
         renderFretboard();
       });
@@ -1216,24 +1252,100 @@
       renderFretboard();
     });
 
-    // --- Note circle ---
-    function noteCircle(note) {
+    // --- Conmutador Notas vs Intervalos en el Diapasón ---
+    const fbModeNotesBtn = document.getElementById('fb-mode-notes');
+    const fbModeIntervalsBtn = document.getElementById('fb-mode-intervals');
+
+    function setFretboardDisplayMode(mode) {
+      state.displayMode = mode;
+      fbModeNotesBtn.classList.toggle('chord-mode-btn--active', mode === 'notes');
+      fbModeIntervalsBtn.classList.toggle('chord-mode-btn--active', mode === 'intervals');
+      renderFretboard();
+    }
+
+    fbModeNotesBtn.addEventListener('click', () => setFretboardDisplayMode('notes'));
+    fbModeIntervalsBtn.addEventListener('click', () => setFretboardDisplayMode('intervals'));
+
+    // --- Superposición de Acorde en el Diapasón ---
+    const overlayBanner = document.getElementById('fretboard-overlay-banner');
+    const overlayText = document.getElementById('fretboard-overlay-text');
+    const overlayClearBtn = document.getElementById('fretboard-overlay-clear-btn');
+
+    function updateOverlayBanner() {
+      if (!state.chordOverlay) {
+        overlayBanner.classList.add('chord-hidden');
+        overlayText.innerHTML = '';
+      } else {
+        overlayBanner.classList.remove('chord-hidden');
+        overlayText.innerHTML = `
+          <span>🎸 <strong>Acorde superpuesto:</strong> ${state.chordOverlay.title} — <em>${state.chordOverlay.voicingLabel}</em> (los puntos con aro dorado pertenecen al voicing; el resto de la escala se muestra atenuado).</span>
+        `;
+      }
+    }
+
+    overlayClearBtn.addEventListener('click', () => {
+      state.chordOverlay = null;
+      updateOverlayBanner();
+      renderFretboard();
+    });
+
+    window.showChordOverlayOnFretboard = function (payload) {
+      if (!payload) return;
+      state.root = payload.root || state.root;
+      state.chordOverlay = payload;
+      updateRootButtons();
+      updateOverlayBanner();
+      renderFretboard();
+    };
+
+    // --- Note circle (soporta nombres de nota, intervalos y superposición de acorde) ---
+    function noteCircle(note, stringIndex, fretNumber) {
       const isRoot = note === state.root;
-      const active = activeNotes().includes(note);
+      const inScale = activeNotes().includes(note);
       const allNotesMode = state.scale === 'All Notes';
 
-      if (!active && !allNotesMode) return null;
+      // Verificar si esta cuerda y traste exacto pertenecen al voicing superpuesto
+      // TUNING tiene 0=1ª cuerda (aguda) .. 5=6ª cuerda (grave); realFrets tiene 0=6ª cuerda .. 5=1ª cuerda
+      let isOverlayHit = false;
+      if (state.chordOverlay && Array.isArray(state.chordOverlay.realFrets)) {
+        const chordArrayIdx = 5 - stringIndex;
+        const targetFret = state.chordOverlay.realFrets[chordArrayIdx];
+        if (typeof targetFret === 'number' && targetFret === fretNumber) {
+          isOverlayHit = true;
+        }
+      }
+
+      if (!inScale && !allNotesMode && !isOverlayHit) return null;
 
       let bg = 'bg-slate-700 text-slate-300 shadow-md';
       if (isRoot) {
         bg = 'bg-rose-500 text-white shadow-[0_0_12px_rgba(244,63,94,0.8)] ring-2 ring-white/20 scale-110';
-      } else if (active && !allNotesMode) {
+      } else if (inScale && !allNotesMode) {
         bg = 'bg-emerald-500 text-white shadow-[0_0_10px_rgba(16,185,129,0.5)] ring-1 ring-white/10';
+      } else if (isOverlayHit) {
+        bg = 'bg-emerald-500 text-white';
       }
 
-      return el('div',
+      if (state.chordOverlay) {
+        if (isOverlayHit) {
+          bg += ' fb-note-overlay-hit';
+        } else {
+          bg += ' fb-note-dimmed';
+        }
+      }
+
+      const label = (state.displayMode === 'intervals' && window.ChordsLogic)
+        ? window.ChordsLogic.getIntervalLabel(state.root, note)
+        : note;
+
+      const node = el('div',
         'w-7 h-7 flex items-center justify-center rounded-full font-bold text-xs transition-all duration-300 cursor-default select-none ' + bg,
-        note);
+        label);
+
+      if (label.length >= 3) {
+        node.style.fontSize = '10px';
+      }
+      return node;
     }
 
     // --- Fretboard rendering ---
@@ -1242,7 +1354,7 @@
     function renderFretboard() {
       board.innerHTML = '';
 
-      // Fret numbers header — primera celda fija de 60px (igual que el nut) para que 1..15 queden exactos sobre sus trastes
+      // Fret numbers header
       const header = el('div', 'flex mb-2 text-slate-500 text-sm font-bold select-none');
       header.appendChild(el('div', 'w-[60px] flex-shrink-0 text-center', 'Nut'));
       for (let i = 1; i <= NUM_FRETS; i++) {
@@ -1253,7 +1365,7 @@
       // Fretboard body
       const body = el('div', 'bg-[#2c1e16] border-4 border-[#1a120c] rounded-md relative shadow-2xl flex flex-col pt-3 pb-3');
 
-      // Inlays (background layer) — misma estructura que el cuerpo: 60px fijos + 15 celdas flex-1
+      // Inlays (background layer)
       const inlays = el('div', 'absolute inset-0 z-0 flex');
       inlays.appendChild(el('div', 'w-[60px] flex-shrink-0 relative border-r-8 border-black/40'));
       for (let i = 1; i <= NUM_FRETS; i++) {
@@ -1286,7 +1398,7 @@
 
         // Nut (Fret 0)
         const nut = el('div', 'w-[60px] flex-shrink-0 relative z-20 flex items-center justify-center border-r-8 border-slate-950 bg-black/20');
-        const nutNote = noteCircle(getNoteAtFret(openNote, 0));
+        const nutNote = noteCircle(getNoteAtFret(openNote, 0), stringIndex, 0);
         if (nutNote) nut.appendChild(nutNote);
         row.appendChild(nut);
 
@@ -1294,7 +1406,7 @@
         for (let f = 1; f <= NUM_FRETS; f++) {
           const fret = el('div',
             'flex-1 relative z-20 flex items-center justify-center hover:bg-white/5 transition-colors');
-          const fretNote = noteCircle(getNoteAtFret(openNote, f));
+          const fretNote = noteCircle(getNoteAtFret(openNote, f), stringIndex, f);
           if (fretNote) fret.appendChild(fretNote);
           row.appendChild(fret);
         }
@@ -1304,9 +1416,6 @@
 
       board.appendChild(body);
     }
-
-    updateRootButtons();
-    renderFretboard();
 
     // ================= Círculo de Quintas =================
     const CIRCLE_DATA = [
@@ -1332,7 +1441,7 @@
     const circleInfo = document.getElementById('circle-info');
     const majorNodes = [];
     const minorNodes = [];
-    const circleState = { selected: 0 };
+    const circleState = { selected: 1 }; // G por defecto (sincronizado con state.root = 'G')
 
     function positionOnCircle(node, index, radius) {
       const angle = (index * 30 - 90) * (Math.PI / 180);
@@ -1345,7 +1454,7 @@
         'absolute w-12 h-12 -ml-6 -mt-6 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 z-10',
         data.major);
       positionOnCircle(major, index, RADIUS_MAJOR);
-      major.addEventListener('click', () => selectCircleKey(index));
+      major.addEventListener('click', () => selectCircleKey(index, true));
       circleNodes.appendChild(major);
       majorNodes[index] = major;
 
@@ -1353,15 +1462,33 @@
         'absolute w-10 h-10 -ml-5 -mt-5 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 z-10',
         data.minor);
       positionOnCircle(minor, index, RADIUS_MINOR);
-      minor.addEventListener('click', () => selectCircleKey(index));
+      minor.addEventListener('click', () => selectCircleKey(index, true));
       circleNodes.appendChild(minor);
       minorNodes[index] = minor;
     });
 
-    function selectCircleKey(index) {
+    function syncCircleToGlobalRoot(noteCanonical) {
+      if (!window.ChordsLogic) return;
+      const idx = CIRCLE_DATA.findIndex(item => window.ChordsLogic.resolveEnharmonicRoot(item.major) === noteCanonical);
+      if (idx !== -1) {
+        circleState.selected = idx;
+        updateCircleNodes();
+        renderCircleInfo();
+      }
+    }
+
+    function selectCircleKey(index, syncGlobalFretboard) {
       circleState.selected = index;
       updateCircleNodes();
       renderCircleInfo();
+      if (syncGlobalFretboard && window.ChordsLogic) {
+        const canonical = window.ChordsLogic.resolveEnharmonicRoot(CIRCLE_DATA[index].major);
+        if (canonical) {
+          state.root = canonical;
+          updateRootButtons();
+          renderFretboard();
+        }
+      }
     }
 
     function updateCircleNodes() {
@@ -1384,16 +1511,103 @@
       circleInfo.appendChild(el('div', 'text-xl font-bold text-emerald-400 mb-2', d.major + ' Mayor'));
       circleInfo.appendChild(el('div', 'text-slate-300 text-sm mb-1', 'Relativa menor: ' + d.minor));
       circleInfo.appendChild(el('div', 'text-slate-400 text-sm mb-4', 'Alteraciones: ' + d.acc));
+
+      const notesWrap = el('div', 'mb-2');
       d.notes.forEach(note => {
-        circleInfo.appendChild(el('span',
+        notesWrap.appendChild(el('span',
           'inline-flex items-center justify-center w-9 h-9 m-1 rounded-full bg-slate-700 text-slate-200 font-bold text-sm',
           note));
       });
+      circleInfo.appendChild(notesWrap);
+
+      // Botones de puente hacia el Diapasón
+      if (window.ChordsLogic) {
+        const majorCanonical = window.ChordsLogic.resolveEnharmonicRoot(d.major) || 'C';
+        const minorRaw = d.minor.replace(/m$/i, '');
+        const minorCanonical = window.ChordsLogic.resolveEnharmonicRoot(minorRaw) || 'A';
+
+        const bridgeRow = el('div', 'circle-bridge-actions');
+
+        const btnMajorScale = el('button', 'circle-action-btn', `🎸 Ver Escala de ${d.major} Mayor en el Diapasón`);
+        btnMajorScale.type = 'button';
+        btnMajorScale.addEventListener('click', () => {
+          state.root = majorCanonical;
+          state.scale = 'Major';
+          state.chordOverlay = null;
+          scaleSelect.value = 'Major';
+          updateRootButtons();
+          updateOverlayBanner();
+          renderFretboard();
+          window.switchToTab('fretboard');
+        });
+
+        const btnMinorScale = el('button', 'circle-action-btn', `🎸 Ver Relativa Menor (${d.minor}) en el Diapasón`);
+        btnMinorScale.type = 'button';
+        btnMinorScale.addEventListener('click', () => {
+          state.root = minorCanonical;
+          state.scale = 'Natural Minor';
+          state.chordOverlay = null;
+          scaleSelect.value = 'Natural Minor';
+          updateRootButtons();
+          updateOverlayBanner();
+          renderFretboard();
+          window.switchToTab('fretboard');
+        });
+
+        bridgeRow.appendChild(btnMajorScale);
+        bridgeRow.appendChild(btnMinorScale);
+        circleInfo.appendChild(bridgeRow);
+
+        // 7 Acordes Diatónicos Armonizados clicables hacia el Diccionario de Acordes
+        const diatonicSection = el('div', 'circle-diatonic-section');
+        diatonicSection.appendChild(el('div', 'circle-diatonic-title', `Acordes Diatónicos de ${d.major} Mayor`));
+        diatonicSection.appendChild(el('div', 'circle-diatonic-hint', 'Haz clic en cualquier grado (tríada o cuatríada con 7ª) para abrir sus diagramas en el Diccionario de Acordes:'));
+
+        const grid = el('div', 'circle-diatonic-grid');
+        const degrees = window.ChordsLogic.getDiatonicChordsForKey(majorCanonical);
+
+        degrees.forEach(deg => {
+          const card = el('div', 'circle-degree-card');
+          card.appendChild(el('span', 'circle-degree-roman', deg.roman));
+          card.appendChild(el('span', 'circle-degree-role', deg.role));
+
+          // Botón de Tríada (o m7b5 para vii°)
+          const triadBtn = el('button', 'circle-chord-btn', deg.triadLabel);
+          triadBtn.type = 'button';
+          triadBtn.addEventListener('click', () => {
+            if (typeof window.setChordDictionary === 'function') {
+              window.setChordDictionary(deg.root, deg.triadQuality, 0);
+            }
+            window.switchToTab('chords');
+          });
+          card.appendChild(triadBtn);
+
+          // Botón de Cuatríada con 7ª (si es distinto de la tríada)
+          if (deg.seventhQuality !== deg.triadQuality) {
+            const sevBtn = el('button', 'circle-chord-btn circle-chord-btn--seventh', deg.seventhLabel);
+            sevBtn.type = 'button';
+            sevBtn.addEventListener('click', () => {
+              if (typeof window.setChordDictionary === 'function') {
+                window.setChordDictionary(deg.root, deg.seventhQuality, 0);
+              }
+              window.switchToTab('chords');
+            });
+            card.appendChild(sevBtn);
+          }
+
+          grid.appendChild(card);
+        });
+
+        diatonicSection.appendChild(grid);
+        circleInfo.appendChild(diatonicSection);
+      }
     }
 
-    selectCircleKey(0);
+    updateRootButtons();
+    renderFretboard();
+    selectCircleKey(1, false);
 
-    // ================= Tabs =================
+    // ================= Tabs y Navegación Programática =================
     function activateTab(name) {
       document.querySelectorAll('.tab-btn').forEach(btn => {
         const active = btn.id === 'tab-btn-' + name;
@@ -1404,13 +1618,14 @@
         panel.classList.toggle('hidden', panel.id !== 'tab-' + name);
       });
     }
+
+    window.switchToTab = activateTab;
+
     document.getElementById('tab-btn-fretboard').addEventListener('click', () => activateTab('fretboard'));
     document.getElementById('tab-btn-circle').addEventListener('click', () => activateTab('circle'));
     document.getElementById('tab-btn-chords').addEventListener('click', () => activateTab('chords'));
     activateTab('fretboard');
   </script>
-  <script src="chords-data.js"></script>
-  <script src="chords-logic.js"></script>
   <script src="chords-render.js"></script>
 </body>
 </html>

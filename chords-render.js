@@ -1,7 +1,8 @@
 // ============================================================================
 // chords-render.js
-// Renderizado de diagramas SVG (diagrama principal, variaciones y mástil completo)
-// e interacción de la pestaña "Diccionario de Acordes"
+// Renderizado de diagramas SVG (diagrama principal, variaciones y mástil completo),
+// cálculo automático de tónica (mod 12), visualización de intervalos/dedos/notas
+// y conexión interactiva con Diapasón y Círculo de Quintas.
 // ============================================================================
 
 (function () {
@@ -26,29 +27,45 @@
   }
 
   /**
+   * Ajusta dinámicamente el tamaño de fuente dentro del círculo SVG
+   * según la cantidad de caracteres ('1' vs 'b3' vs 'bb7') para evitar desbordes.
+   */
+  function getDynamicDotFontSize(labelText, isVariation) {
+    const len = String(labelText || '').length;
+    if (isVariation) {
+      if (len <= 1) return 10.5;
+      if (len === 2) return 8.8;
+      return 7.4;
+    } else {
+      if (len <= 1) return 13;
+      if (len === 2) return 11;
+      return 9.2;
+    }
+  }
+
+  /**
    * Genera el SVG de un diagrama de acorde (principal o de variación).
    *
-   * Requisitos visuales cumplidos:
-   * - Nombres de cuerda E, A, D, G, B, E en la parte superior.
-   * - Barra superior extra gruesa (cejuela) cuando startFret === 0.
-   * - Número(s) de traste a la izquierda:
-   *   * Diagrama principal: enumera los 5 trastes visibles (1..5 si startFret===0, o startFret..startFret+4 si startFret>0).
-   *   * Variaciones: muestra el número de traste inicial a la izquierda si startFret > 0.
-   * - Puntos de digitación: círculos negros sólidos sobre las intersecciones cuerda/traste.
-   * - Números de dedo (1, 2, 3, 4) en blanco dentro de los puntos negros en las variaciones
-   *   (o si fingers[i] es null, punto negro sin número).
-   * - Cejilla móvil (barre): barra + arco conectando las cuerdas `from` a `to` en el traste correspondiente.
-   * - Indicadores debajo de cada cuerda:
-   *   * X para cuerda muda ("x")
-   *   * O para cuerda abierta (0)
-   *   * Punto negro pequeño debajo de la cuerda en variaciones cuando la cuerda se toca presionada (> 0).
+   * Incluye:
+   * - Cálculo automático mod 12 para resaltar la Tónica (Raíz) en color rosa (#f43f5e).
+   * - Visualización configurable dentro de los puntos: Dedos (1-4), Intervalos (1, b3, 5, b7),
+   *   Notas (C, E, G) o puntos limpios, con ajuste dinámico de fuente.
    */
   function createChordDiagramSVG(voicing, options = {}) {
     const isVariation = Boolean(options.isVariation);
-    const showFingersInMain = Boolean(options.showFingersInMain);
-    const showFingerNumbers = isVariation || showFingersInMain;
+    // Modo de etiqueta en puntos: 'fingers' | 'intervals' | 'notes' | 'none'
+    const dotLabelMode = options.dotLabelMode || (isVariation ? 'fingers' : 'none');
+    const soundingRoot = options.soundingRoot || 'C';
+    const qualityKey = options.qualityKey || 'maj';
+
+    const {
+      isRootAtStringFret,
+      getNoteAtStandardStringFret,
+      getIntervalLabel
+    } = window.ChordsLogic;
 
     const frets = voicing.displayFrets || voicing.frets;
+    const realFrets = voicing.realFrets || frets;
     const fingers = voicing.fingers || [null, null, null, null, null, null];
     const barre = voicing.displayBarre !== undefined ? voicing.displayBarre : voicing.barre;
     const startFret = voicing.displayStartFret !== undefined ? voicing.displayStartFret : voicing.startFret;
@@ -76,7 +93,7 @@
       'aria-label': `Diagrama del acorde ${voicing.label || ''}`
     });
 
-    // Fondo claro tipo papel/tarjeta para máximo contraste de los puntos negros sólidos
+    // Fondo claro tipo papel/tarjeta para alto contraste
     svg.appendChild(svgEl('rect', {
       x: 0,
       y: 0,
@@ -144,7 +161,6 @@
 
     // 4. Numeración de trastes a la izquierda de la cuadrícula
     if (!isVariation) {
-      // En el diagrama principal: enumerar los 5 trastes visibles (1 al 5, o desde startFret si startFret > 0)
       for (let f = 1; f <= numFrets; f++) {
         const fretNum = baseFret + f - 1;
         const yCenter = padTop + (f - 0.5) * fretSpacing;
@@ -161,7 +177,6 @@
         }, String(fretNum)));
       }
     } else if (startFret > 0) {
-      // En variaciones: mostrar el traste inicial a la izquierda si startFret > 0
       const yFirstCenter = padTop + 0.5 * fretSpacing;
       svg.appendChild(svgEl('text', {
         x: padLeft - 14,
@@ -186,7 +201,7 @@
         const yCenter = padTop + (relFret - 0.5) * fretSpacing;
         const barHeight = isVariation ? 10 : 14;
 
-        // Arco curvo suave de cejilla conectando las cuerdas
+        // Arco curvo superior de cejilla
         const arcOffset = isVariation ? 11 : 16;
         const midX = (x1 + x2) / 2;
         const arcPath = `M ${x1} ${yCenter - 2} Q ${midX} ${yCenter - arcOffset} ${x2} ${yCenter - 2}`;
@@ -210,52 +225,75 @@
       }
     }
 
-    // 6. Dots (puntos negros sólidos) y números de dedo (en blanco)
-    const dotRadius = isVariation ? 9.5 : 13.5;
+    // 6. Dots (puntos de digitación con resaltado automático de Tónica mod 12) y etiquetas internas
+    const dotRadius = isVariation ? 9.8 : 13.8;
     for (let s = 0; s < numStrings; s++) {
       const fretVal = frets[s];
+      const realFretVal = realFrets[s];
       if (typeof fretVal === 'number' && fretVal > 0) {
         const relFret = fretVal - baseFret + 1;
         if (relFret >= 1 && relFret <= numFrets) {
           const cx = padLeft + s * stringSpacing;
           const cy = padTop + (relFret - 0.5) * fretSpacing;
 
-          // Círculo negro sólido
+          // Cálculo automático mod 12: ¿esta cuerda/traste real es la Tónica del acorde?
+          const isRoot = isRootAtStringFret(s, realFretVal, soundingRoot);
+
+          // Círculo del punto (Rosa #f43f5e para Tónica, Negro #0f172a para resto de notas)
           svg.appendChild(svgEl('circle', {
             cx,
             cy,
             r: dotRadius,
-            fill: '#0f172a',
+            fill: isRoot ? '#f43f5e' : '#0f172a',
             stroke: '#f8fafc',
-            'stroke-width': 1.2
+            'stroke-width': isRoot ? 1.8 : 1.2,
+            class: isRoot ? 'chord-dot chord-dot--root' : 'chord-dot'
           }));
 
-          // Número de dedo en blanco dentro del punto negro (si existe y corresponde mostrarlo)
-          const fingerVal = fingers && fingers[s];
-          if (showFingerNumbers && fingerVal !== null && fingerVal !== undefined) {
+          // Determinar el texto a mostrar dentro del punto según dotLabelMode
+          let dotText = null;
+          if (dotLabelMode === 'fingers') {
+            const fingerVal = fingers && fingers[s];
+            if (fingerVal !== null && fingerVal !== undefined) {
+              dotText = String(fingerVal);
+            }
+          } else if (dotLabelMode === 'intervals') {
+            const noteName = getNoteAtStandardStringFret(s, realFretVal);
+            if (noteName) {
+              dotText = getIntervalLabel(soundingRoot, noteName, qualityKey);
+            }
+          } else if (dotLabelMode === 'notes') {
+            const noteName = getNoteAtStandardStringFret(s, realFretVal);
+            if (noteName) {
+              dotText = noteName;
+            }
+          }
+
+          if (dotText) {
+            const fontSize = getDynamicDotFontSize(dotText, isVariation);
             svg.appendChild(svgEl('text', {
               x: cx,
               y: cy + 0.5,
               'text-anchor': 'middle',
               'dominant-baseline': 'central',
               fill: '#ffffff',
-              'font-size': isVariation ? 10.5 : 13,
+              'font-size': fontSize,
               'font-weight': '800',
               'font-family': 'system-ui, -apple-system, sans-serif'
-            }, String(fingerVal)));
+            }, dotText));
           }
         }
       }
     }
 
-    // 7. Indicadores X / O / punto negro pequeño debajo de cada cuerda
+    // 7. Indicadores X / O / punto pequeño debajo de cada cuerda
     const bottomY = padTop + gridHeight + (isVariation ? 18 : 24);
     for (let s = 0; s < numStrings; s++) {
       const fretVal = frets[s];
+      const realFretVal = realFrets[s];
       const cx = padLeft + s * stringSpacing;
 
       if (fretVal === 'x' || fretVal === 'X') {
-        // Cuerda muda: X debajo de la cuerda, sin punto en el mástil
         const r = isVariation ? 4.5 : 6;
         svg.appendChild(svgEl('line', {
           x1: cx - r,
@@ -276,33 +314,23 @@
           'stroke-linecap': 'round'
         }));
       } else if (fretVal === 0) {
-        // Cuerda al aire: O debajo de la cuerda, sin punto en el mástil
+        const isRootOpen = isRootAtStringFret(s, realFretVal, soundingRoot);
         svg.appendChild(svgEl('circle', {
           cx,
           cy: bottomY,
           r: isVariation ? 5 : 6.5,
-          fill: 'none',
-          stroke: '#0f172a',
-          'stroke-width': isVariation ? 2.2 : 2.5
+          fill: isRootOpen ? 'rgba(244, 63, 94, 0.15)' : 'none',
+          stroke: isRootOpen ? '#f43f5e' : '#0f172a',
+          'stroke-width': isVariation ? 2.2 : 2.6
         }));
       } else if (typeof fretVal === 'number' && fretVal > 0) {
-        if (isVariation) {
-          // Punto negro pequeño debajo de la cuerda en variaciones para reforzar que se toca presionada
-          svg.appendChild(svgEl('circle', {
-            cx,
-            cy: bottomY,
-            r: 3.5,
-            fill: '#0f172a'
-          }));
-        } else {
-          // En el diagrama principal, también dibujamos el pequeño punto negro indicador
-          svg.appendChild(svgEl('circle', {
-            cx,
-            cy: bottomY,
-            r: 4,
-            fill: '#0f172a'
-          }));
-        }
+        const isRootFretted = isRootAtStringFret(s, realFretVal, soundingRoot);
+        svg.appendChild(svgEl('circle', {
+          cx,
+          cy: bottomY,
+          r: isVariation ? 3.5 : 4,
+          fill: isRootFretted ? '#f43f5e' : '#0f172a'
+        }));
       }
     }
 
@@ -310,9 +338,8 @@
   }
 
   /**
-   * Genera el Selector Visual del Mástil Completo (0 a 15 trastes) que se ubica a la izquierda
-   * del diagrama principal para contextualizar en qué parte del diapasón se está tocando el acorde,
-   * y permite cambiar entre las posiciones/voicings haciendo clic.
+   * Genera el Selector Visual del Mástil Completo (0 a 15 trastes) a la izquierda
+   * del diagrama principal, resaltando también la Tónica en rosa (#f43f5e).
    */
   function createFullNeckSelectorSVG(chordInfo, activeVoicingIndex, onSelectVoicing) {
     const totalFrets = 15;
@@ -330,6 +357,7 @@
 
     const activeVoicing = chordInfo.voicings[activeVoicingIndex] || chordInfo.voicings[0];
     const capo = chordInfo.capo || 0;
+    const { isRootAtStringFret } = window.ChordsLogic;
 
     const svg = svgEl('svg', {
       viewBox: `0 0 ${width} ${height}`,
@@ -338,7 +366,6 @@
       'aria-label': 'Posición del acorde en el mástil completo'
     });
 
-    // Título superior del mini-mástil
     svg.appendChild(svgEl('text', {
       x: padLeft + neckWidth / 2,
       y: 13,
@@ -349,7 +376,6 @@
       'font-family': 'system-ui, -apple-system, sans-serif'
     }, 'MÁSTIL (1-15)'));
 
-    // Fondo de madera del diapasón completo
     svg.appendChild(svgEl('rect', {
       x: padLeft,
       y: padTop,
@@ -361,7 +387,6 @@
       'stroke-width': 2
     }));
 
-    // Cejuela (traste 0)
     svg.appendChild(svgEl('rect', {
       x: padLeft - 1,
       y: padTop - 3,
@@ -371,7 +396,6 @@
       fill: '#e2e8f0'
     }));
 
-    // Inlays (puntos guía en trastes 3, 5, 7, 9, 12, 15)
     const markers = [3, 5, 7, 9, 12, 15];
     for (const m of markers) {
       const cy = padTop + (m - 0.5) * fretSpacing;
@@ -398,7 +422,6 @@
       }
     }
 
-    // Líneas de trastes 1..15 y números de guía a la izquierda
     const numberedFrets = [1, 3, 5, 7, 9, 12, 15];
     for (let f = 1; f <= totalFrets; f++) {
       const y = padTop + f * fretSpacing;
@@ -425,7 +448,6 @@
       }
     }
 
-    // Zona sombreada si hay Capo aplicado (trastes cubiertos detrás del capo)
     if (capo > 0) {
       svg.appendChild(svgEl('rect', {
         x: padLeft,
@@ -436,7 +458,6 @@
       }));
     }
 
-    // Ventana resaltada del voicing activo en el mástil
     const realFrets = activeVoicing.realFrets || activeVoicing.frets;
     const numericReal = realFrets.filter(f => typeof f === 'number' && f > 0);
     const minFret = numericReal.length ? Math.min(...numericReal) : (capo > 0 ? capo : 1);
@@ -461,7 +482,6 @@
       'stroke-width': 2
     }));
 
-    // Cuerdas verticales
     for (let s = 0; s < 6; s++) {
       const x = padLeft + s * stringSpacing;
       svg.appendChild(svgEl('line', {
@@ -474,7 +494,6 @@
       }));
     }
 
-    // Dibujar cejilla del Capo si capo > 0
     if (capo > 0) {
       const capoY = padTop + (capo - 0.5) * fretSpacing;
       svg.appendChild(svgEl('rect', {
@@ -489,24 +508,25 @@
       }));
     }
 
-    // Puntos reales del voicing activo sobre el mástil completo
+    // Puntos reales del voicing sobre el mástil completo (Rosa si es Tónica, Verde si es nota del acorde)
     for (let s = 0; s < 6; s++) {
       const rf = realFrets[s];
       if (typeof rf === 'number' && rf > 0 && rf <= totalFrets) {
         const cx = padLeft + s * stringSpacing;
         const cy = padTop + (rf - 0.5) * fretSpacing;
+        const isRoot = isRootAtStringFret(s, rf, chordInfo.soundingRoot);
         svg.appendChild(svgEl('circle', {
           cx,
           cy,
-          r: 4.2,
-          fill: rf === capo ? '#fbbf24' : '#10b981',
-          stroke: '#0f172a',
+          r: isRoot ? 4.8 : 4.2,
+          fill: isRoot ? '#f43f5e' : (rf === capo ? '#fbbf24' : '#10b981'),
+          stroke: isRoot ? '#ffffff' : '#0f172a',
           'stroke-width': 1
         }));
       }
     }
 
-    // Puntos interactivos invisibles/zonas clicables para cambiar rápidamente de posición en el mástil
+    // Marcadores laterales clicables para cambiar de voicing
     chordInfo.voicings.forEach((v, idx) => {
       const vNums = (v.realFrets || v.frets).filter(f => typeof f === 'number' && f > 0);
       const vMin = vNums.length ? Math.min(...vNums) : 1;
@@ -544,7 +564,9 @@
       CHROMATIC_NOTES,
       ENHARMONIC_DISPLAY,
       QUALITY_META,
+      resolveEnharmonicRoot,
       parseChordQuery,
+      getIntervalLabel,
       getChordWithCapo
     } = window.ChordsLogic;
 
@@ -553,11 +575,13 @@
       quality: 'maj',
       capo: 0,
       selectedVoicing: 0,
-      showFingersInMain: false,
+      // Modo de etiqueta en diagrama principal: 'none' | 'fingers' | 'intervals' | 'notes'
+      mainDotMode: 'intervals',
+      // Modo de etiqueta en variaciones: 'fingers' | 'intervals'
+      variationDotMode: 'fingers',
       searchError: ''
     };
 
-    // Referencias a elementos del DOM dentro de la pestaña de acordes
     const rootSelect = document.getElementById('chord-root-select');
     const qualitySelect = document.getElementById('chord-quality-select');
     const capoSelect = document.getElementById('chord-capo-select');
@@ -565,7 +589,8 @@
     const searchBtn = document.getElementById('chord-search-btn');
     const searchFeedback = document.getElementById('chord-search-feedback');
     const quickRootPills = document.getElementById('chord-root-pills');
-    const toggleMainFingersBtn = document.getElementById('chord-toggle-fingers-btn');
+    const dotModeButtons = document.querySelectorAll('[data-chord-dot-mode]');
+    const sendToFretboardBtn = document.getElementById('chord-send-to-fretboard-btn');
 
     const titleEl = document.getElementById('chord-main-title');
     const subtitleEl = document.getElementById('chord-main-subtitle');
@@ -579,7 +604,7 @@
     const variationsMount = document.getElementById('chord-variations-grid');
     const variationsPosNav = document.getElementById('chord-pos-QuickNav');
 
-    // 1. Poblar selector de Tónica (con enharmónicos p.ej. "F# / Gb")
+    // 1. Poblar selector de Tónica
     CHROMATIC_NOTES.forEach(note => {
       const opt = document.createElement('option');
       opt.value = note;
@@ -643,14 +668,35 @@
       syncControlsAndRender();
     });
 
-    if (toggleMainFingersBtn) {
-      toggleMainFingersBtn.addEventListener('click', () => {
-        state.showFingersInMain = !state.showFingersInMain;
-        toggleMainFingersBtn.setAttribute('aria-pressed', String(state.showFingersInMain));
-        toggleMainFingersBtn.textContent = state.showFingersInMain
-          ? 'Ocultar dedos en principal'
-          : 'Mostrar dedos en principal';
+    // Conmutador de modo de etiquetas en los puntos (Dedos | Intervalos | Notas | Limpio)
+    dotModeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.getAttribute('data-chord-dot-mode');
+        state.mainDotMode = mode;
+        state.variationDotMode = (mode === 'intervals' || mode === 'notes') ? mode : 'fingers';
         syncControlsAndRender();
+      });
+    });
+
+    // Botón para superponer el voicing actual en el Diapasón principal
+    if (sendToFretboardBtn) {
+      sendToFretboardBtn.addEventListener('click', () => {
+        const chordInfo = getChordWithCapo(state.root, state.quality, state.capo);
+        if (!chordInfo) return;
+        const activeVoicing = chordInfo.voicings[state.selectedVoicing] || chordInfo.voicings[0];
+        if (typeof window.showChordOverlayOnFretboard === 'function') {
+          window.showChordOverlayOnFretboard({
+            root: chordInfo.soundingRoot,
+            quality: chordInfo.quality,
+            title: chordInfo.capo > 0 ? chordInfo.soundingTitle : chordInfo.baseTitle,
+            voicingLabel: activeVoicing.label,
+            realFrets: activeVoicing.realFrets || activeVoicing.frets,
+            capo: chordInfo.capo
+          });
+        }
+        if (typeof window.switchToTab === 'function') {
+          window.switchToTab('fretboard');
+        }
       });
     }
 
@@ -721,6 +767,11 @@
         }
       });
 
+      dotModeButtons.forEach(btn => {
+        const mode = btn.getAttribute('data-chord-dot-mode');
+        btn.classList.toggle('chord-mode-btn--active', mode === state.mainDotMode);
+      });
+
       renderSearchFeedback();
 
       const chordInfo = getChordWithCapo(state.root, state.quality, state.capo);
@@ -732,7 +783,7 @@
 
       const activeVoicing = chordInfo.voicings[state.selectedVoicing];
 
-      // Encabezado del acorde (con enharmónicos y transposición de capo)
+      // Encabezado del acorde
       if (chordInfo.capo === 0) {
         titleEl.textContent = chordInfo.baseTitle;
         subtitleEl.textContent = chordInfo.baseSubtitle;
@@ -761,12 +812,10 @@
         }
       }
 
-      // Información del voicing activo
       voicingLabelEl.textContent = `Posición ${state.selectedVoicing + 1} de ${chordInfo.voicings.length}: ${activeVoicing.label}`;
       difficultyBadgeEl.textContent = `Dificultad: ${activeVoicing.difficulty}`;
       difficultyBadgeEl.className = `chord-difficulty-badge chord-difficulty-badge--${activeVoicing.difficulty}`;
 
-      // Botones rápidos de posición (1..5)
       if (variationsPosNav) {
         variationsPosNav.innerHTML = '';
         chordInfo.voicings.forEach((v, idx) => {
@@ -782,7 +831,7 @@
         });
       }
 
-      // Renderizar selector visual del mástil completo (izquierda)
+      // Selector visual del mástil completo (izquierda)
       fullNeckMount.innerHTML = '';
       fullNeckMount.appendChild(
         createFullNeckSelectorSVG(chordInfo, state.selectedVoicing, (newIdx) => {
@@ -791,12 +840,14 @@
         })
       );
 
-      // Renderizar diagrama principal (centro-izquierda)
+      // Diagrama principal (centro-izquierda)
       mainDiagramMount.innerHTML = '';
       mainDiagramMount.appendChild(
         createChordDiagramSVG(activeVoicing, {
           isVariation: false,
-          showFingersInMain: state.showFingersInMain
+          dotLabelMode: state.mainDotMode,
+          soundingRoot: chordInfo.soundingRoot,
+          qualityKey: chordInfo.quality
         })
       );
 
@@ -809,18 +860,19 @@
         mainWarningEl.className = 'chord-limit-warning chord-hidden';
       }
 
-      // Notas que suenan en el voicing principal
+      // Notas e intervalos que suenan en el voicing principal
       mainNotesMount.innerHTML = '';
       const uniqueNotes = [...new Set(activeVoicing.soundingNotes)];
-      uniqueNotes.forEach((n, idx) => {
+      uniqueNotes.forEach(n => {
         const pill = document.createElement('span');
         const isRootNote = n === chordInfo.soundingRoot;
+        const interval = getIntervalLabel(chordInfo.soundingRoot, n, chordInfo.quality);
         pill.className = 'chord-note-pill' + (isRootNote ? ' chord-note-pill--root' : '');
-        pill.textContent = ENHARMONIC_DISPLAY[n] || n;
+        pill.textContent = `${ENHARMONIC_DISPLAY[n] || n} (${interval})`;
         mainNotesMount.appendChild(pill);
       });
 
-      // Renderizar panel de variaciones (derecha)
+      // Panel de variaciones (derecha)
       variationsMount.innerHTML = '';
       chordInfo.voicings.forEach((v, idx) => {
         const card = document.createElement('div');
@@ -846,13 +898,18 @@
         header.appendChild(diffSpan);
         card.appendChild(header);
 
-        // SVG de variación (incluye dedos 1-4 en blanco dentro de los puntos negros y punto pequeño bajo cuerdas pulsadas)
         const svgWrap = document.createElement('div');
         svgWrap.className = 'chord-var-card__svg-wrap';
-        svgWrap.appendChild(createChordDiagramSVG(v, { isVariation: true }));
+        svgWrap.appendChild(
+          createChordDiagramSVG(v, {
+            isVariation: true,
+            dotLabelMode: state.variationDotMode,
+            soundingRoot: chordInfo.soundingRoot,
+            qualityKey: chordInfo.quality
+          })
+        );
         card.appendChild(svgWrap);
 
-        // Pie de tarjeta con trastes y notas
         const footer = document.createElement('div');
         footer.className = 'chord-var-card__footer';
 
@@ -892,6 +949,20 @@
         variationsMount.appendChild(card);
       });
     }
+
+    // Exponer función programática global para que el Círculo de Quintas u otras pestañas
+    // puedan abrir cualquier acorde directamente sin acoplar estados internos.
+    window.setChordDictionary = function (rootInput, qualityInput, capoInput = 0) {
+      const canonicalRoot = resolveEnharmonicRoot(rootInput) || 'C';
+      const validQuality = QUALITY_META[qualityInput] ? qualityInput : 'maj';
+      state.root = canonicalRoot;
+      state.quality = validQuality;
+      state.capo = Math.max(0, Math.min(12, parseInt(capoInput, 10) || 0));
+      state.selectedVoicing = 0;
+      state.searchError = '';
+      if (searchInput) searchInput.value = '';
+      syncControlsAndRender();
+    };
 
     syncControlsAndRender();
   }
